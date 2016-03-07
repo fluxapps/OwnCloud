@@ -23,6 +23,17 @@ class ilOwnCloud extends ilCloudPlugin {
 
 
 	/**
+	 * @param      $obj_id
+	 * @param null $cloud_modul_object
+	 *
+	 * @throws ilCloudException
+	 */
+	public function __construct($obj_id, $cloud_modul_object = NULL) {
+		parent::__construct('OwnCloud', $obj_id, $cloud_modul_object);
+	}
+
+
+	/**
 	 * @return bool
 	 */
 	public function read() {
