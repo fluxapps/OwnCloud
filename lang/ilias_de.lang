@@ -1,7 +1,6 @@
-SWITCHdrive#:#SWITCHdrive
-create_info#:#Anbindung des Cloud-Dienstes SWITCHdrive auf <a href="https://drive.switch.ch" target="_blank">https://drive.switch.ch</a><br>Diese Dateien sind nicht in ILIAS gespeichert, sondern nur im SWITCHdrive, und können in ILIAS nur gelesen werden, solange der Dienst SWITCHdrive zur Verfügung steht, und Ihre Zugangsdaten korrekt hinterlegt sind.
+create_info#:#Anbindung des Cloud-Dienstes OwnCloud
 msg_not_configured#:#Um den Inhalt dieses Ordners anzuzeigen, müssen zuerst gültige Benutzername und Passwort konfiguriert werden.
-password_info#:#Bitte beachten Sie, dass die Zugangsdaten für SWITCHdrive in ILIAS gespeichert werden, und so von den Systemadministratoren ausgelesen werden könnten. Aus Sicherheitsgründen sollten Sie für unterschiedliche Webdienste auch immer unterschiedliche Passwörter verwenden.
+password_info#:#Bitte beachten Sie, dass die Zugangsdaten für %s in ILIAS gespeichert werden, und so von den Systemadministratoren ausgelesen werden könnten. Aus Sicherheitsgründen sollten Sie für unterschiedliche Webdienste auch immer unterschiedliche Passwörter verwenden.
 base_url#:#Basis-URL
 username#:#Benutzername
 password#:#Passwort
@@ -14,4 +13,7 @@ add_new_custom_base_folder_input_info#:#Mit führendem /
 add_new_default_base_folder#:#Hauptverzeichnis
 choose_root#:#Bitte wählen Sie unten den gewünschten zu verlinkenden Ordner aus.
 subtab_choose_root#:#Ordner auswählen
-no_connection#:#Es konnte keine Verbindung zum SWITCHdrive Server hergestellt werden. Bitte überprüfen Sie den Benutzernamen und das Passwort und kontaktieren Sie allenfalls den Systemadministrator.
+no_connection#:#Es konnte keine Verbindung zum %s Server hergestellt werden. Bitte überprüfen Sie den Benutzernamen und das Passwort und kontaktieren Sie allenfalls den Systemadministrator.
+cfg_service_title#:#Service Titel
+cfg_service_info#:#Service Info Text
+cfg_base_url#:#Basis-URL

@@ -1,12 +1,12 @@
 <?php
-require_once('class.swdrItem.php');
+require_once(__DIR__ . '/class.ownclItem.php');
 
 /**
- * Class swdrFolder
+ * Class ownclFolder
  *
  * @author  Theodor Truffer <tt@studer-raimann.ch>
  */
-class swdrFolder extends swdrItem {
+class ownclFolder extends ownclItem {
 
 	/**
 	 * @var int
@@ -16,10 +16,10 @@ class swdrFolder extends swdrItem {
 	 * @var int
 	 */
 	protected $child_count = 0;
-    /**
-     * @var array
-     */
-    protected $childs;
+	/**
+	 * @var array
+	 */
+	protected $childs;
 
 
 	/**
@@ -53,27 +53,24 @@ class swdrFolder extends swdrItem {
 		$this->type = $type;
 	}
 
-    /**
-     * @param array $childs
-     */
-    public function setChilds($childs)
-    {
-        $this->childs = $childs;
-    }
 
-    /**
-     * @return array
-     */
-    public function getChilds()
-    {
-        return $this->childs;
-    }
-
-    public function addChild($id){
-        $this->childs[] = $id;
-    }
+	/**
+	 * @param array $childs
+	 */
+	public function setChilds($childs) {
+		$this->childs = $childs;
+	}
 
 
+	/**
+	 * @return array
+	 */
+	public function getChilds() {
+		return $this->childs;
+	}
+
+
+	public function addChild($id) {
+		$this->childs[] = $id;
+	}
 }
-
-?>

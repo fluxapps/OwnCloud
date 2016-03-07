@@ -1,7 +1,7 @@
 <#1>
 <?php
-include_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/SWITCHdrive/classes/class.ilSWITCHdrivePlugin.php");
-$plugin_object = ilSWITCHdrivePlugin::getInstance();
+require_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/ownCloud/classes/class.ilOwnCloudPlugin.php");
+$pl = ilOwnCloudPlugin::getInstance();
 
 $fields = array(
     'id' => array(
@@ -27,14 +27,19 @@ $fields = array(
     ),
 );
 global $ilDB;
-$ilDB->createTable($plugin_object->getPluginTableName(), $fields);
-$ilDB->addPrimaryKey($plugin_object->getPluginTableName(), array( "id" ));
+$ilDB->createTable($pl->getPluginTableName(), $fields);
+$ilDB->addPrimaryKey($pl->getPluginTableName(), array( "id" ));
 ?>
 <#2>
 <?php
-include_once("./Modules/Cloud/classes/class.ilCloudPluginConfig.php");
-include_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/SWITCHdrive/classes/class.ilSWITCHdrivePlugin.php");
-$plugin_object = ilSWITCHdrivePlugin::getInstance();
-$config_object = new ilCloudPluginConfig($plugin_object->getPluginConfigTableName());
-$config_object->initDB();
+require_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/ownCloud/classes/class.ownclConfig.php");
+$config = new ownclConfig();
+$config->initDB();
+?>
+<#3>
+<?php
+require_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/ownCloud/classes/class.ownclConfig.php");
+$config = new ownclConfig();
+$config->setValue(ownclConfig::F_TITLE, 'ownCloud');
+$config->setValue(ownclConfig::F_DESCRIPTION, 'Anbindung des Cloud-Dienstes OwnCloud');
 ?>
