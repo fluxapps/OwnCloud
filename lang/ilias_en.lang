@@ -1,7 +1,6 @@
-SWITCHdrive#:#SWITCHdrive
-create_info#:#Inteface for Cloud-Service SWITCHdrive at <a href="https://drive.switch.ch" target="_blank">https://drive.switch.ch</a><br>This data is not stored in ILIAS, only in SWITCHdrive. They can only be read if the SWITCHdrive service is available and the credentials are correct.
+create_info#:#Inteface for Cloud-Service ownCloud
 msg_not_configured#:#The credentials for the connection have to be configured properly to view this folder's content.
-password_info#:#Notice that the credentials for SWITCHdrive are stored in ILIAS and thus could be read by systemadministrators. For security reasons, different passwords should be used for different webservices.
+password_info#:#Notice that the credentials for %s are stored in ILIAS and thus could be read by system administrators. For security reasons, different passwords should be used for different webservices.
 base_url#:#Base-URL
 username#:#Username
 password#:#Password
@@ -14,4 +13,7 @@ add_new_custom_base_folder_input_info#:#With leading /
 add_new_default_base_folder#:#Main folder
 choose_root#:#Please choose a root folder from the tree below.
 subtab_choose_root#:#Choose folder
-no_connection#:#Could not connect to the SWITCHdrive server. Please check your username and password or contact the system administrator.
+no_connection#:#Could not connect to the %s server. Please check your username and password or contact the system administrator.
+cfg_service_title#:#Service Title
+cfg_service_info#:#Service Info Text
+cfg_base_url#:#Base-URL

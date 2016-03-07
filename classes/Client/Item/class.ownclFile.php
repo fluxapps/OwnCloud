@@ -1,12 +1,12 @@
 <?php
-require_once('class.swdrItem.php');
+require_once(__DIR__ . '/class.ownclItem.php');
 
 /**
- * Class swdrFile
+ * Class ownclFile
  *
  * @author  Theodor Truffer <tt@studer-raimann.ch>
  */
-class swdrFile extends swdrItem {
+class ownclFile extends ownclItem {
 
 	/**
 	 * @var array
@@ -37,24 +37,26 @@ class swdrFile extends swdrItem {
 	 */
 	protected $content_url = '';
 
-    /**
-     * @param $web_url String
-     * @param $properties array
-     */
-    public function loadFromProperties($web_url, $properties, $parent_id) {
-        parent::loadFromProperties($web_url, $properties, $parent_id);
-        $this->setSize($properties["{DAV:}getcontentlength"]);
-    }
 
-    /**
-     * @param $web_url String
-     * @param $properties array
-     */
-    public function loadFromResponse($response, $path) {
-        $this->setName(substr($path, strrpos($path, '/')));
-        $this->setContentUrl($path);
+	/**
+	 * @param $web_url    String
+	 * @param $properties array
+	 */
+	public function loadFromProperties($web_url, $properties, $parent_id) {
+		parent::loadFromProperties($web_url, $properties, $parent_id);
+		$this->setSize($properties["{DAV:}getcontentlength"]);
+	}
 
-    }
+
+	/**
+	 * @param $web_url    String
+	 * @param $properties array
+	 */
+	public function loadFromResponse($response, $path) {
+		$this->setName(substr($path, strrpos($path, '/')));
+		$this->setContentUrl($path);
+	}
+
 
 	/**
 	 * @return bool
@@ -68,7 +70,7 @@ class swdrFile extends swdrItem {
 	 * @return null
 	 */
 	public function getMsURL() {
-		if (! $this->isMsFormat()) {
+		if (!$this->isMsFormat()) {
 			return NULL;
 		}
 
@@ -126,5 +128,3 @@ class swdrFile extends swdrItem {
 		$this->content_url = $content_url;
 	}
 }
-
-?>
