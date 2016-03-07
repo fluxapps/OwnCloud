@@ -1,6 +1,6 @@
 <#1>
 <?php
-require_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/ownCloud/classes/class.ilOwnCloudPlugin.php");
+require_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/OwnCloud/classes/class.ilOwnCloudPlugin.php");
 $pl = ilOwnCloudPlugin::getInstance();
 
 $fields = array(
@@ -32,13 +32,13 @@ $ilDB->addPrimaryKey($pl->getPluginTableName(), array( "id" ));
 ?>
 <#2>
 <?php
-require_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/ownCloud/classes/class.ownclConfig.php");
+require_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/OwnCloud/classes/class.ownclConfig.php");
 $config = new ownclConfig();
 $config->initDB();
 ?>
 <#3>
 <?php
-require_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/ownCloud/classes/class.ownclConfig.php");
+require_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/OwnCloud/classes/class.ownclConfig.php");
 $config = new ownclConfig();
 $config->setValue(ownclConfig::F_TITLE, 'ownCloud');
 $config->setValue(ownclConfig::F_DESCRIPTION, 'Anbindung des Cloud-Dienstes OwnCloud');

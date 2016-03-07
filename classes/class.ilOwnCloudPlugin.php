@@ -10,7 +10,7 @@ if (!class_exists('ilOwnCloudPlugin')) {
 	 */
 	class ilOwnCloudPlugin extends ilCloudHookPlugin {
 
-		const PLUGIN_NAME = 'ownCloud';
+		const PLUGIN_NAME = 'OwnCloud';
 
 
 		/**
