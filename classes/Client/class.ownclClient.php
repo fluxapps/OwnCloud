@@ -238,7 +238,7 @@ class ownclClient {
 	 */
 	protected function getObjectSettings() {
 		$obj_id = ilObject2::_lookupObjectId((int)$_GET['ref_id']);
-		$obj = new ilOwnCloud($obj_id);
+		$obj = new ilOwnCloud('OwnCloud', $obj_id);
 		$conf = new ownclConfig();
 		$settings = array(
 			'baseUri' => rtrim($conf->getBaseURL(), '/') . '/',
