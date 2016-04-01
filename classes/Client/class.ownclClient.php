@@ -10,6 +10,7 @@ use Sabre\DAV\Client;
  */
 class ownclClient {
 
+	const DEBUG = false;
 	/**
 	 * @var Sabre\DAV\Client
 	 */
@@ -22,7 +23,6 @@ class ownclClient {
 	 * @var ilOwnCloud
 	 */
 	protected $pl;
-	const DEBUG = true;
 
 
 	/**
@@ -242,7 +242,7 @@ class ownclClient {
 		$obj = new ilOwnCloud('OwnCloud', $obj_id);
 		$conf = new ownclConfig();
 		$settings = array(
-			'baseUri' => rtrim($conf->getBaseURL(), '/') . '/',
+			'baseUri'  => rtrim($conf->getBaseURL(), '/') . '/',
 			'userName' => $obj->getUsername(),
 			'password' => $obj->getPassword(),
 		);
