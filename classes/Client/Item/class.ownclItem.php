@@ -66,7 +66,7 @@ abstract class ownclItem {
 		}
 		$this->setName(substr($web_url, strrpos($web_url, '/') + 1, strlen($web_url) - strrpos($web_url, '/')));
 		$web_url = substr($web_url, 0, - (strlen($this->getName())));
-		$this->setPath(substr($web_url, 18));
+		$this->setPath(substr($web_url, strpos($web_url, 'remote.php/webdav/') + 18));
 		$this->setDateTimeLastModified($properties["{DAV:}getlastmodified"]);
 		$this->setETag($properties["{DAV:}getetag"]);
 	}
