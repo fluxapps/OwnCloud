@@ -106,7 +106,8 @@ class ownclClient {
 	 * @throws ilCloudException
 	 */
 	public function deliverFile($path) {
-		$path = $this->urlencode($path);
+		$str = ltrim($path, "/");
+		$path = $this->urlencode($str);
 		$response = $this->getSabreClient()->request('GET', $path);
 		if (self::DEBUG) {
 			global $log;
