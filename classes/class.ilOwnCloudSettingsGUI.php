@@ -157,9 +157,8 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 		global $ilTabs, $ilCtrl, $lng;
 		$ilTabs->activateTab("settings");
 
-		$ilCtrl->setParameter($this, 'active_subtab', 'general');
+		$ilCtrl->setParameter($this, 'active_subtab', $active);
 		$ilTabs->addSubTab("general", $lng->txt("general_settings"), $ilCtrl->getLinkTarget($this, 'editSettings'));
-		$ilCtrl->setParameter($this, 'active_subtab', 'choose_root');
 		$ilTabs->addSubTab("choose_root", $this->getPluginObject()->getPluginHookObject()
 			->txt("subtab_choose_root"), $ilCtrl->getLinkTarget($this, 'editSettings'));
 		$ilTabs->activateSubTab($active);
