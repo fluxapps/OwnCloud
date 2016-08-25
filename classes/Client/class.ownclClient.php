@@ -66,9 +66,14 @@ class ownclClient {
 	 * @return ownclFile[]|ownclFolder[]
 	 */
 	public function listFolder($id) {
+		global $ilLog;
 		$id = $this->urlencode(ltrim($id, '/'));
+		$ilLog->write('listFolder: ' . $id);
+
 		$settings = $this->getObjectSettings();
 		if ($client = $this->getSabreClient()) {
+			$ilLog->write('listFolder: ' . $settings['baseUri'] . $id);
+
 			$response = $client->propFind($settings['baseUri'] . $id, array(), 1);
 			$items = ownclItemFactory::getInstancesFromResponse($response);
 
@@ -248,5 +253,13 @@ class ownclClient {
 		);
 
 		return $settings;
+	}
+
+	/**
+	 * (re)initialize the client with settings from the owncloud object
+	 */
+	public function loadClient() {
+		$settings = $this->getObjectSettings();
+		$this->sabre_client = new Client($settings);
 	}
 }

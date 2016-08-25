@@ -100,16 +100,28 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 
 
 	public function updatePluginSettings() {
+		global $ilCtrl;
+
 		$this->setTabs("general");
+
+		$client = $this->getPluginObject()->getOwnCloudApp()->getOwnCloudClient();
+		$had_connection = $client->hasConnection();
 
 		$this->getPluginObject()->setUsername($this->form->getInput("username"));
 		$this->getPluginObject()->setPassword($this->form->getInput("password"));
 		$this->getPluginObject()->doUpdate();
 
-		$client = $this->getPluginObject()->getOwnCloudApp()->getOwnCloudClient();
-		if (!$client->hasConnection()) {
-			$title = $this->getPluginObject()->getAdminConfigObject()->getServiceTitle();
-			ilUtil::sendFailure(sprintf($this->pl->txt('no_connection'), $title), true);
+		$client->loadClient();
+		$has_connection = $client->hasConnection();
+		// show tree view if client found connection after the update
+		if (!$had_connection && $has_connection) {
+			$ilCtrl->setParameter($this, 'active_subtab', 'choose_root');
+		} else {
+			$ilCtrl->setParameter($this, 'active_subtab', 'general');
+		}
+
+		if(!$client->hasConnection()){
+			ilUtil::sendFailure($this->getPluginObject()->getPluginHookObject()->txt('no_connection'), true);
 		}
 	}
 
@@ -118,7 +130,11 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 	 * Edit Settings. This commands uses the form class to display an input form.
 	 */
 	function editSettings() {
-		global $tpl, $ilTabs, $lng, $ilCtrl;
+		global $tpl;
+
+		if($root_path = $_GET['root_path']) {
+			$this->setRootFolder($root_path);
+		}
 
 		if ($_GET['active_subtab'] == 'choose_root') {
 			$this->setTabs("choose_root");
@@ -157,8 +173,9 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 		global $ilTabs, $ilCtrl, $lng;
 		$ilTabs->activateTab("settings");
 
-		$ilCtrl->setParameter($this, 'active_subtab', $active);
+		$ilCtrl->setParameter($this, 'active_subtab', "general");
 		$ilTabs->addSubTab("general", $lng->txt("general_settings"), $ilCtrl->getLinkTarget($this, 'editSettings'));
+		$ilCtrl->setParameter($this, 'active_subtab', "choose_root");
 		$ilTabs->addSubTab("choose_root", $this->getPluginObject()->getPluginHookObject()
 			->txt("subtab_choose_root"), $ilCtrl->getLinkTarget($this, 'editSettings'));
 		$ilTabs->activateSubTab($active);
@@ -170,7 +187,11 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 		$client = $this->getPluginObject()->getOwnCloudApp()->getOwnCloudClient();
 		if ($client->hasConnection()) {
 			$tree = new ownclTree($client);
-			$tree_gui = new ownclTreeGUI('tree_expl', 'ilCloudPluginSettingsGUI', 'setRootFolder', $tree);
+			$tree_gui = new ownclTreeGUI('tree_expl', $this, 'editSettings', $tree);
+			if ($tree_gui->handleCommand())
+			{
+				return;
+			}
 			ilUtil::sendInfo($this->getPluginObject()->getPluginHookObject()->txt('choose_root'), true);
 			$tpl->setContent($tree_gui->getHTML());
 			$tpl->show();
