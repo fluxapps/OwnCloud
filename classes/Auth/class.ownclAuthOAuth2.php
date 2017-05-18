@@ -5,6 +5,7 @@ require_once 'class.ownclAuth.php';
 require_once 'Provider/class.OAuth2Provider.php';
 require_once 'Services/Form/classes/class.ilSubEnabledFormPropertyGUI.php';
 require_once 'Services/Form/classes/class.ilNonEditableValueGUI.php';
+require_once 'Services/Table/interfaces/interface.ilTableFilterItem.php';
 /**
  * Class ownclAuthOAuth2
  *
