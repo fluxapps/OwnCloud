@@ -22,7 +22,6 @@ class ilOwnCloudService extends ilCloudPluginService {
 		return $this->getPluginObject()->getOwnCloudApp();
 	}
 
-
 	/**
 	 * @return ownclClient
 	 */
@@ -31,12 +30,30 @@ class ilOwnCloudService extends ilCloudPluginService {
 	}
 
 
+	/**
+	 * @return ownclAuth
+	 */
+	public function getAuth() {
+		return $this->getApp()->getOwnclAuth();
+	}
+
+
+	/**
+	 * @param string $callback_url
+	 */
+	public function authService($callback_url = "") {
+		$this->getAuth()->authenticate(htmlspecialchars_decode($callback_url));
+	}
+
+
+	/**
+	 * @return bool
+	 */
 	public function afterAuthService() {
 		global $ilCtrl;
-		ilUtil::sendFailure($this->plugin_object->getPluginHookObject()->txt('msg_not_configured'), true);
 		$ilCtrl->setCmd('edit');
 
-		return true;
+		return $this->getAuth()->afterAuthentication($this->getPluginObject());
 	}
 
 
@@ -45,11 +62,21 @@ class ilOwnCloudService extends ilCloudPluginService {
 	 * @param string          $parent_folder
 	 */
 	public function addToFileTree(ilCloudFileTree $file_tree, $parent_folder = "/") {
-		$files = $this->getClient()->listFolder($parent_folder);
-		foreach ($files as $k => $item) {
-			$size = ($item instanceof ownclFile) ? $size = $item->getSize() : NULL;
-			$is_dir = $item instanceof ownclFolder;
-			$file_tree->addNode($item->getFullPath(), $k . $item->getId(), $is_dir, strtotime($item->getDateTimeLastModified()), $size);
+		try {
+			$files = $this->getClient()->listFolder($parent_folder);
+			foreach ($files as $k => $item) {
+				$size = ($item instanceof ownclFile) ? $size = $item->getSize() : NULL;
+				$is_dir = $item instanceof ownclFolder;
+				$file_tree->addNode($item->getFullPath(), $k . $item->getId(), $is_dir, strtotime($item->getDateTimeLastModified()), $size);
+			}
+		} catch (Exception $e) {
+			if ($this->getPluginObject()->getCloudModulObject()->getAuthComplete()) {
+				global $ilCtrl;
+				$this->getPluginObject()->getCloudModulObject()->setAuthComplete(false);
+				$this->getPluginObject()->getCloudModulObject()->update();
+				$ilCtrl->redirectByClass($_GET['cmdClass'], $_GET['cmd']);
+			}
+			throw $e;
 		}
 	}
 

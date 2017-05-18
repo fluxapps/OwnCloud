@@ -60,8 +60,8 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 		$folder->setSize(50);
 		$this->form->addItem($folder);
 
-		$this->createPluginSection();
-		$this->initPluginSettings();
+		$this->getPluginObject()->getOwnCloudApp()->getOwnclAuth()->initPluginSettings($this->form);
+
 
 		$this->form->addCommandButton("updateSettings", $lng->txt("save"));
 
@@ -70,6 +70,9 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 	}
 
 
+	/**
+	 *
+	 */
 	public function setRootFolder() {
 		global $ilCtrl, $lng;
 		$root_path = $_GET['root_path'];
@@ -80,6 +83,9 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 	}
 
 
+	/**
+	 *
+	 */
 	protected function initPluginSettings() {
 		$item = new ilTextInputGUI($this->pl->txt('username'), 'username');
 		$item->setRequired(true);

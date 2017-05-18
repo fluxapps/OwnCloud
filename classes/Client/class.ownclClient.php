@@ -1,8 +1,7 @@
 <?php
 require_once(__DIR__ . '/Item/class.ownclItemFactory.php');
 require_once(dirname(__DIR__) . '/class.ownclConfig.php');
-use Sabre\DAV\Client;
-
+require_once('DAVClient/DAVClient.php');
 /**
  * Class ownclClient
  *
@@ -10,8 +9,10 @@ use Sabre\DAV\Client;
  */
 class ownclClient {
 
+	const AUTH_BEARER = 'auth_bearer';
+
 	/**
-	 * @var Sabre\DAV\Client
+	 * @var DAVClient
 	 */
 	protected $sabre_client;
 	/**
@@ -22,6 +23,10 @@ class ownclClient {
 	 * @var ilOwnCloud
 	 */
 	protected $pl;
+	/**
+	 * @var ownclConfig
+	 */
+	protected $config;
 	const DEBUG = true;
 
 
@@ -31,27 +36,33 @@ class ownclClient {
 	public function __construct(ownclApp $ownclApp) {
 		$this->setOwnCloudApp($ownclApp);
 		$this->pl = ilOwnCloudPlugin::getInstance();
-		if (PHP_VERSION_ID < 50400) {   //sabredav 3.0 is not supported for php version < 5.4
-			require_once(dirname(dirname(__DIR__)) . '/lib/SabreDAV-1.8.12/vendor/autoload.php');
-		} else {
-			require_once(dirname(dirname(__DIR__)) . '/lib/SabreDAV-3.0.0/vendor/autoload.php');
-		}
+		$this->config = new ownclConfig();
+
 	}
 
 
-	protected function getSabreClient() {
+	/**
+	 * @return ownclAuth
+	 */
+	protected function getAuth() {
+		return $this->getOwnCloudApp()->getOwnclAuth();
+	}
+
+
+	/**
+	 * @return DAVClient
+	 */
+	protected function getWebDAVClient() {
 		if (!$this->sabre_client) {
-			$settings = $this->getObjectSettings();
-			$this->sabre_client = new Client($settings);
+			$this->sabre_client = new DAVClient($this->getAuth()->getClientSettings());
 		}
 
 		return $this->sabre_client;
 	}
 
-
 	public function hasConnection() {
 		try {   //sabredav version 1.8 throws exception on missing connection
-			$response = $this->getSabreClient()->request('GET');
+			$response = $this->getWebDAVClient()->request('GET', '', null, $this->getAuth()->getHeaders());
 		} catch (Exception $e) {
 			return false;
 		}
@@ -70,11 +81,11 @@ class ownclClient {
 		$id = $this->urlencode(ltrim($id, '/'));
 		$ilLog->write('listFolder: ' . $id);
 
-		$settings = $this->getObjectSettings();
-		if ($client = $this->getSabreClient()) {
+		$settings = $this->getAuth()->getClientSettings();
+		if ($client = $this->getWebDAVClient()) {
 			$ilLog->write('listFolder: ' . $settings['baseUri'] . $id);
 
-			$response = $client->propFind($settings['baseUri'] . $id, array(), 1);
+			$response = $client->propFind($settings['baseUri'] . $id, array(), 1, $this->getAuth()->getHeaders());
 			$items = ownclItemFactory::getInstancesFromResponse($response);
 
 			return $items;
@@ -113,7 +124,7 @@ class ownclClient {
 	public function deliverFile($path) {
 		$str = ltrim($path, "/");
 		$path = $this->urlencode($str);
-		$response = $this->getSabreClient()->request('GET', $path);
+		$response = $this->getWebDAVClient()->request('GET', $path, null, $this->getAuth()->getHeaders());
 		if (self::DEBUG) {
 			global $log;
 			$log->write("[ownclClient]->deliverFile({$path}) | response status Code: {$response['statusCode']}");
@@ -141,7 +152,7 @@ class ownclClient {
 	 */
 	public function createFolder($path) {
 		$path = $this->urlencode($path);
-		$response = $this->getSabreClient()->request('MKCOL', ltrim($path, '/'));
+		$response = $this->getWebDAVClient()->request('MKCOL', ltrim($path, '/'), null, $this->getAuth()->getHeaders());
 		if (self::DEBUG) {
 			global $log;
 			$log->write("[ownclClient]->createFolder({$path}) | response status Code: {$response['statusCode']}");
@@ -181,7 +192,7 @@ class ownclClient {
 			}
 			$location = $basename . "({$i})." . $extension;
 		}
-		$response = $this->getSabreClient()->request('PUT', $location, file_get_contents($local_file_path));
+		$response = $this->getWebDAVClient()->request('PUT', $location, file_get_contents($local_file_path), $this->getAuth()->getHeaders());
 		if (self::DEBUG) {
 			global $log;
 			$log->write("[ownclClient]->uploadFile({$location}, {$local_file_path}) | response status Code: {$response['statusCode']}");
@@ -197,7 +208,7 @@ class ownclClient {
 	 * @return bool
 	 */
 	public function delete($path) {
-		$response = $this->getSabreClient()->request('DELETE', ltrim($this->urlencode($path), '/'));
+		$response = $this->getWebDAVClient()->request('DELETE', ltrim($this->urlencode($path), '/'), null, $this->getAuth()->getHeaders());
 		if (self::DEBUG) {
 			global $log;
 			$log->write("[ownclClient]->delete({$path}) | response status Code: {$response['statusCode']}");
@@ -214,7 +225,7 @@ class ownclClient {
 	 */
 	protected function itemExists($path) {
 		try {
-			$request = $this->getSabreClient()->request('GET', $this->urlencode($path));
+			$request = $this->getWebDAVClient()->request('GET', $this->urlencode($path), null, $this->getAuth()->getHeaders());
 		} catch (Exception $e) {
 			return false;
 		}
@@ -235,31 +246,14 @@ class ownclClient {
 	 * @param $owncl_app
 	 */
 	public function setOwnCloudApp($owncl_app) {
-		$this->exod_app = $owncl_app;
+		$this->owncl_app = $owncl_app;
 	}
 
-
-	/**
-	 * @return array
-	 */
-	protected function getObjectSettings() {
-		$obj_id = ilObject2::_lookupObjectId((int)$_GET['ref_id']);
-		$obj = new ilOwnCloud('OwnCloud', $obj_id);
-		$conf = new ownclConfig();
-		$settings = array(
-			'baseUri' => rtrim($conf->getBaseURL(), '/') . '/',
-			'userName' => $obj->getUsername(),
-			'password' => $obj->getPassword(),
-		);
-
-		return $settings;
-	}
 
 	/**
 	 * (re)initialize the client with settings from the owncloud object
 	 */
 	public function loadClient() {
-		$settings = $this->getObjectSettings();
-		$this->sabre_client = new Client($settings);
+		$this->sabre_client = new DAVClient($this->getAuth()->getClientSettings());
 	}
 }

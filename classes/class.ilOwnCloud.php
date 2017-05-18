@@ -20,6 +20,22 @@ class ilOwnCloud extends ilCloudPlugin {
 	 * @var String
 	 */
 	protected $password;
+	/**
+	 * @var string
+	 */
+	protected $access_token = '';
+	/**
+	 * @var string
+	 */
+	protected $refresh_token = '';
+	/**
+	 * @var string
+	 */
+	protected $valid_through = '';
+	/**
+	 * @var int
+	 */
+	protected $validation_user_id = 6;
 
 
 	/**
@@ -31,6 +47,19 @@ class ilOwnCloud extends ilCloudPlugin {
 	 */
 	public function __construct($service_name, $obj_id, $cloud_modul_object = NULL) {
 		parent::__construct('OwnCloud', $obj_id, $cloud_modul_object);
+	}
+
+
+	/**
+	 * @param $token League\OAuth2\Client\Token\AccessToken
+	 */
+	public function storeToken($token) {
+		global $ilUser;
+		$this->setAccessToken($token->getToken());
+		$this->setRefreshToken($token->getRefreshToken());
+		$this->setValidThrough($token->getExpires());
+		$this->setValidationUserId($ilUser->getId());
+		$this->doUpdate();
 	}
 
 
@@ -96,7 +125,34 @@ class ilOwnCloud extends ilCloudPlugin {
 				'text',
 				$this->getPassword()
 			),
+			'access_token' => array(
+				'text',
+				$this->getAccessToken()
+			),
+			'refresh_token' => array(
+				'text',
+				$this->getRefreshToken()
+			),
+			'valid_through' => array(
+				'integer',
+				$this->getValidThrough()
+			),
+			'validation_user_id' => array(
+				'integer',
+				$this->getValidationUserId()
+			),
 		);
+	}
+
+
+	/**
+	 *
+	 */
+	public function flushTokens() {
+		$this->setValidThrough(0);
+		$this->setAccessToken('');
+		$this->setRefreshToken('');
+		$this->doUpdate();
 	}
 
 
@@ -105,11 +161,23 @@ class ilOwnCloud extends ilCloudPlugin {
 	 * @throws ilCloudException
 	 */
 	public function getOwnCloudApp() {
-		$inst = ilOwnCloudPlugin::getInstance()->getOwnCloudApp();
+		$app = ilOwnCloudPlugin::getInstance()->getOwnCloudApp($this);
 
-		return $inst;
+		if ($this->getAdminConfigObject()->getValue(ownclConfig::F_OAUTH2_ACTIVE) && $this->isTokenExpired()) {
+			global $ilUser;
+			if ($ilUser->getId() == $this->getOwnerId()) {
+				$app->getOwnclAuth()->checkAndRefreshToken();
+			} else {
+				throw new ilCloudException(ilCloudException::AUTHENTICATION_FAILED, 'Der Ordner kann zur Zeit nur vom Besitzer geöffnet werden.');
+			}
+		}
+
+		return $app;
 	}
 
+	public function isTokenExpired() {
+		return ((int)$this->getValidThrough() != 0) && ($this->getValidThrough() <= time());
+	}
 
 	/**
 	 * @param String $password
@@ -157,4 +225,70 @@ class ilOwnCloud extends ilCloudPlugin {
 	public function getBaseUri() {
 		return $this->base_uri;
 	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getAccessToken() {
+		return $this->access_token;
+	}
+
+
+	/**
+	 * @param string $access_token
+	 */
+	public function setAccessToken($access_token) {
+		$this->access_token = $access_token;
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getRefreshToken() {
+		return $this->refresh_token;
+	}
+
+
+	/**
+	 * @param string $refresh_token
+	 */
+	public function setRefreshToken($refresh_token) {
+		$this->refresh_token = $refresh_token;
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getValidThrough() {
+		return $this->valid_through;
+	}
+
+
+	/**
+	 * @param string $valid_through
+	 */
+	public function setValidThrough($valid_through) {
+		$this->valid_through = $valid_through;
+	}
+
+
+	/**
+	 * @return int
+	 */
+	public function getValidationUserId() {
+		return $this->validation_user_id;
+	}
+
+
+	/**
+	 * @param int $validation_user_id
+	 */
+	public function setValidationUserId($validation_user_id) {
+		$this->validation_user_id = $validation_user_id;
+	}
+
+
 }
