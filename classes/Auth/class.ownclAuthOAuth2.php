@@ -63,22 +63,24 @@ class ownclAuthOAuth2 implements ownclAuth {
 	}
 
 
-	public function checkAndAuthenticate() {
+	public function checkAndRefreshAuthentication() {
+		if (!$this->getApp()->getIlOwnCloud()->getAccessToken()) {
+			return false;
+		}
 		if ($this->getApp()->getIlOwnCloud()->isTokenExpired()) {
 			try {
 				$this->refreshToken();
+				return true;
 			} catch (Exception $e) {
-				$this->getApp()->getIlOwnCloud()->flushTokens();
-				$this->authenticate($this->getRedirectUri());
+				return false;
 			}
-		} elseif ($this->getApp()->getIlOwnCloud()->getValidThrough() == 0) {
-			$this->authenticate($this->getRedirectUri());
 		}
+		return true;
 	}
 
 
 	public function refreshToken() {
-			$this->storeTokenToSession($this->oauth2_provider->getAccessToken('refresh_token', array(
+			$this->getApp()->getIlOwnCloud()->storeToken($this->oauth2_provider->getAccessToken('refresh_token', array(
 				'refresh_token' => $this->getApp()->getIlOwnCloud()->getRefreshToken()
 			)));
 	}

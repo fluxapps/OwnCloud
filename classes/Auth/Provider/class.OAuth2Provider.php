@@ -17,12 +17,7 @@ class OAuth2Provider extends GenericProvider {
 	{
 		$options = parent::getAccessTokenOptions($params);
 		$options['headers']['Authorization'] = 'Basic ' . base64_encode($this->clientId.':'.$this->clientSecret);
-		$options['headers']['Content-Type'] = 'application/x-www-form-urlencoded';
 		return $options;
 	}
-
-
-	public function authorize(array $options = [], callable $redirectHandler = NULL) {
-		ilUtil::redirect($this->getAuthorizationUrl($options));
-	}
+	
 }

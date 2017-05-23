@@ -7,7 +7,10 @@
  */
 interface ownclAuth {
 
-	public function checkAndAuthenticate();
+	/**
+	 * @return bool
+	 */
+	public function checkAndRefreshAuthentication();
 
 	/**
 	 * @param $callback_url String

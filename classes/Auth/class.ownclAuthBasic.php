@@ -78,7 +78,7 @@ class ownclAuthBasic implements ownclAuth {
 	}
 
 
-	public function checkAndAuthenticate() {
+	public function checkAndRefreshAuthentication() {
 		return true;
 	}
 
