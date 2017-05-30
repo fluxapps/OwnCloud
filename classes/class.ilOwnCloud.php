@@ -163,15 +163,10 @@ class ilOwnCloud extends ilCloudPlugin {
 	public function getOwnCloudApp() {
 		$app = ilOwnCloudPlugin::getInstance()->getOwnCloudApp($this);
 
-		global $ilUser;
-		if ($ilUser->getId() == $this->getOwnerId()) {
-			if (!$app->getOwnclAuth()->checkAndRefreshAuthentication() && $this->getCloudModulObject()->getAuthComplete()) {
-				$this->getCloudModulObject()->setAuthComplete(false);
-				$this->getCloudModulObject()->doUpdate();
-				$this->flushTokens();
-			}
-		} else {
-			throw new ilCloudException(ilCloudException::AUTHENTICATION_FAILED, 'Der Ordner kann zur Zeit nur vom Besitzer geöffnet werden.');
+		if (!$app->getOwnclAuth()->checkAndRefreshAuthentication() && $this->getCloudModulObject()->getAuthComplete()) {
+			$this->getCloudModulObject()->setAuthComplete(false);
+			$this->getCloudModulObject()->doUpdate();
+			$this->flushTokens();
 		}
 
 		return $app;

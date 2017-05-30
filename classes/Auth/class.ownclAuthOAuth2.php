@@ -64,6 +64,10 @@ class ownclAuthOAuth2 implements ownclAuth {
 
 
 	public function checkAndRefreshAuthentication() {
+		global $ilUser;
+		if (!$ilUser->getId() == $this->getApp()->getIlOwnCloud()->getOwnerId()) {
+			throw new ilCloudException(ilCloudException::AUTHENTICATION_FAILED, 'Der Ordner kann zur Zeit nur vom Besitzer geöffnet werden.');
+		}
 		if (!$this->getApp()->getIlOwnCloud()->getAccessToken()) {
 			return false;
 		}
@@ -134,17 +138,6 @@ class ownclAuthOAuth2 implements ownclAuth {
 	public function afterAuthentication($object) {
 		$token = unserialize(ilSession::get(self::AUTH_BEARER));
 		$object->storeToken($token);
-//		//		return true;
-//		$ilObjCloud = $this->getPluginObject()->getCloudModulObject();
-//		//		$rootFolder = '/ILIASCloud/' . ltrim($ilObjCloud->getRootFolder(), '/');
-//		$rootFolder = $ilObjCloud->getRootFolder();
-//		//		var_dump($rootFolder); // FSX
-//		//		exit;
-//		//		$ilObjCloud->setRootFolder($rootFolder);
-//		//		$ilObjCloud->update();
-//		if (! $this->getClient()->folderExists($rootFolder)) {
-//			$this->createFolder($rootFolder);
-//		}
 
 		return true;
 	}
@@ -152,10 +145,8 @@ class ownclAuthOAuth2 implements ownclAuth {
 
 	public function initPluginSettings(&$form) {
 		$n = new ilNonEditableValueGUI(ilOwnCloudPlugin::getInstance()->txt('info_token_expires'));
-		$n->setValue(date(DATE_ISO8601, $this->getApp()->getIlOwnCloud()->getValidThrough()));
+		$n->setValue(date('d.m.Y - H:i:s', $this->getApp()->getIlOwnCloud()->getValidThrough()));
 		$form->addItem($n);
-
-//		$form->getItemByPostVar('root_folder')->setDisabled(true);
 	}
 
 

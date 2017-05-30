@@ -19,5 +19,5 @@ class OAuth2Provider extends GenericProvider {
 		$options['headers']['Authorization'] = 'Basic ' . base64_encode($this->clientId.':'.$this->clientSecret);
 		return $options;
 	}
-	
+
 }

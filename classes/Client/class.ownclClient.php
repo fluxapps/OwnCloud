@@ -27,7 +27,7 @@ class ownclClient {
 	 * @var ownclConfig
 	 */
 	protected $config;
-	const DEBUG = true;
+	const DEBUG = false;
 
 
 	/**
