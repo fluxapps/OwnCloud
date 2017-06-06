@@ -50,10 +50,14 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 		$cb = new ilCheckboxInputGUI($lng->txt("online"), "online");
 		$this->form->addItem($cb);
 
-		$folder = new ilTextInputGUI($lng->txt("cld_root_folder"), "root_folder");
+		// root folder
+		$folder = new ilTextInputGUI($this->pl->txt("root_folder"), "root_folder");
 		if (!$this->cloud_object->currentUserIsOwner()) {
 			$folder->setDisabled(true);
 			$folder->setInfo($lng->txt("cld_only_owner_has_permission_to_change_root_path"));
+		} else {
+			$ilCtrl->setParameter($this, 'action', "choose_root");
+			$folder->setInfo("<a href='{$ilCtrl->getLinkTarget($this, 'editSettings')}'>".$this->pl->txt("link_choose_root")."</a>");
 		}
 
 		$folder->setMaxLength(255);
@@ -108,7 +112,7 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 	public function updatePluginSettings() {
 		global $ilCtrl;
 
-		$this->setTabs("general");
+		$this->setTabs();
 
 		$client = $this->getPluginObject()->getOwnCloudApp()->getOwnCloudClient();
 		$had_connection = $client->hasConnection();
@@ -121,9 +125,9 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 		$has_connection = $client->hasConnection();
 		// show tree view if client found connection after the update
 		if (!$had_connection && $has_connection) {
-			$ilCtrl->setParameter($this, 'active_subtab', 'choose_root');
+			$ilCtrl->setParameter($this, 'action', 'choose_root');
 		} else {
-			$ilCtrl->setParameter($this, 'active_subtab', 'general');
+			$ilCtrl->setParameter($this, 'action', 'general');
 		}
 
 		if(!$client->hasConnection()){
@@ -136,18 +140,19 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 	 * Edit Settings. This commands uses the form class to display an input form.
 	 */
 	function editSettings() {
-		global $tpl;
+		global $tpl, $ilCtrl;
+
+		$this->setTabs();
 
 		if($root_path = $_GET['root_path']) {
 			$this->setRootFolder($root_path);
 		}
 
-		if ($_GET['active_subtab'] == 'choose_root') {
-			$this->setTabs("choose_root");
+		if ($_GET['action'] == 'choose_root') {
+			$ilCtrl->setParameter($this, "action", "choose_root");
 			$this->showTreeView();
 		}
 
-		$this->setTabs("general");
 
 		try {
 			$this->initSettingsForm();
@@ -175,16 +180,10 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 	/**
 	 * @param $active
 	 */
-	protected function setTabs($active) {
-		global $ilTabs, $ilCtrl, $lng;
+	protected function setTabs() {
+		global $ilTabs;
 		$ilTabs->activateTab("settings");
 
-		$ilCtrl->setParameter($this, 'active_subtab', "general");
-		$ilTabs->addSubTab("general", $lng->txt("general_settings"), $ilCtrl->getLinkTarget($this, 'editSettings'));
-		$ilCtrl->setParameter($this, 'active_subtab', "choose_root");
-		$ilTabs->addSubTab("choose_root", $this->getPluginObject()->getPluginHookObject()
-			->txt("subtab_choose_root"), $ilCtrl->getLinkTarget($this, 'editSettings'));
-		$ilTabs->activateSubTab($active);
 	}
 
 

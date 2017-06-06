@@ -12,7 +12,7 @@ add_new_custom_base_folder_input#:#Ordnername
 add_new_custom_base_folder_input_info#:#Mit führendem /
 add_new_default_base_folder#:#Hauptverzeichnis
 choose_root#:#Bitte wählen Sie unten den gewünschten zu verlinkenden Ordner aus.
-subtab_choose_root#:#Ordner auswählen
+link_choose_root#:#Ordner auswählen
 no_connection#:#Es konnte keine Verbindung zum OwnCloud Server hergestellt werden. Bitte überprüfen Sie den Benutzernamen und das Passwort und kontaktieren Sie allenfalls den Systemadministrator.
 cfg_service_title#:#Service Titel
 cfg_service_info#:#Service Info Text
@@ -25,3 +25,4 @@ cfg_oauth2_active_oauth2_client_secret#:#Secret
 cfg_oauth2_active_oauth2_path#:#OAuth2-Pfad
 cfg_default_info#:#Default: %s
 info_token_expires#:#Access-Token läuft aus
+root_folder#:#Ordner
