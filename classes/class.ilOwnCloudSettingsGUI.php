@@ -142,7 +142,6 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 	function editSettings() {
 		global $tpl, $ilCtrl;
 
-		$this->setTabs();
 
 		if($root_path = $_GET['root_path']) {
 			$this->setRootFolder($root_path);
@@ -153,6 +152,7 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 			$this->showTreeView();
 		}
 
+		$this->setTabs();
 
 		try {
 			$this->initSettingsForm();
@@ -180,15 +180,25 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 	/**
 	 * @param $active
 	 */
-	protected function setTabs() {
-		global $ilTabs;
-		$ilTabs->activateTab("settings");
+	protected function setTabs($back = false) {
+		/** @var $ilTabs ilTabsGUI */
+		global $ilTabs, $lng, $ilCtrl;
+
+		if (!$back) {
+			$ilTabs->activateTab("settings");
+		} else {
+			$ilTabs->clearTargets();
+			$ilCtrl->setParameter($this, "action", '');
+			$ilTabs->setBackTarget($lng->txt('back'), $ilCtrl->getLinkTarget($this, 'editSettings'));
+			$ilCtrl->setParameter($this, "action", 'choose_root');
+		}
 
 	}
 
 
 	public function showTreeView() {
 		global $tpl, $ilCtrl;
+		$this->setTabs(true);
 		$client = $this->getPluginObject()->getOwnCloudApp()->getOwnCloudClient();
 		if ($client->hasConnection()) {
 			$tree = new ownclTree($client);

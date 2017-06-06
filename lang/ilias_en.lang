@@ -11,7 +11,7 @@ add_new_custom_base_folder#:#New Folder
 add_new_custom_base_folder_input#:#Foldername
 add_new_custom_base_folder_input_info#:#With leading /
 add_new_default_base_folder#:#Main folder
-choose_root#:#Please choose a root folder from the tree below.
+choose_root#:#Please choose a root folder from the tree below.<br>Note: folders with many files and subfolders may take a while to load. Alternatively, the path of the desired root folder can be typed in manually.
 link_choose_root#:#Choose folder
 no_connection#:#Could not connect to the OwnCloud server. Please check your username and password or contact the system administrator.
 cfg_service_title#:#Service Title
