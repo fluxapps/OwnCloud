@@ -122,26 +122,31 @@ class ownclClient {
 	 * @throws ilCloudException
 	 */
 	public function deliverFile($path) {
-		$str = ltrim($path, "/");
-		$path = $this->urlencode($str);
-		$response = $this->getWebDAVClient()->request('GET', $path, null, $this->getAuth()->getHeaders());
-		if (self::DEBUG) {
-			global $log;
-			$log->write("[ownclClient]->deliverFile({$path}) | response status Code: {$response['statusCode']}");
-		}
-		$path = rawurldecode($path);
-		$file_name = pathinfo($path, PATHINFO_FILENAME) . '.' . pathinfo($path, PATHINFO_EXTENSION);
-		header("Content-type: " . $response['headers']['content-type']);
-		//        header("Content-type: application/octet-stream");
-		header('Content-Description: File Transfer');
-		header('Content-Disposition: attachment; filename=' . $file_name);
-		header('Content-Transfer-Encoding: binary');
-		header('Expires: 0');
-		header('Cache-Control: must-revalidate');
-		header('Pragma: public');
-		header('Content-Length: ' . $response['headers']['content-length'][0]);
-		echo $response['body'];
-		exit;
+		$path = ltrim($path, "/");
+		$headers = $this->getAuth()->getHeaders();
+
+		$settings = $this->getAuth()->getClientSettings();
+		$prop = array_shift($this->getWebDAVClient()->propFind($settings['baseUri'] . $path, array(), 1, $this->getAuth()->getHeaders()));
+
+		header("Content-type: " . $prop['{DAV:}getcontenttype']);
+		header("Content-Length: " . $prop['{DAV:}getcontentlength']);
+		header("Connection: close");
+		header('Content-Disposition: attachment; filename="' . basename($path) . '"');
+
+
+		set_time_limit(0);
+
+		$opts = array(
+			'http'=>array(
+				'method'=>"GET",
+				'header'=>"Authorization: " . $headers['Authorization']
+			)
+		);
+
+		$context = stream_context_create($opts);
+		$file = &fopen($settings['baseUri'] . $path, "rb", false, $context);
+		fpassthru($file);
+		exit();
 	}
 
 

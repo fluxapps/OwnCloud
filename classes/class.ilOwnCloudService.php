@@ -60,6 +60,8 @@ class ilOwnCloudService extends ilCloudPluginService {
 	/**
 	 * @param ilCloudFileTree $file_tree
 	 * @param string          $parent_folder
+	 *
+	 * @throws Exception
 	 */
 	public function addToFileTree(ilCloudFileTree $file_tree, $parent_folder = "/") {
 		try {
