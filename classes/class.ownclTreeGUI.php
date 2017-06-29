@@ -75,8 +75,19 @@ class ownclTreeGUI extends ilTreeExplorerGUI{
 
 	function getNodeHref($node){
 		global $ilCtrl;
-		$ilCtrl->setParameter($this->parent_obj, 'root_path', $node->getFullPath());
+		$ilCtrl->setParameter($this->parent_obj, 'root_path', $this->urlencode($node->getFullPath()));
 		return $ilCtrl->getLinkTarget($this->parent_obj, 'editSettings');
+	}
+
+	/**
+	 * urlencode without encoding slashes
+	 *
+	 * @param $str
+	 *
+	 * @return mixed
+	 */
+	protected function urlencode($str) {
+		return str_replace('%2F', '/', rawurlencode($str));
 	}
 
 	function isNodeClickable($node){

@@ -122,12 +122,13 @@ class ownclClient {
 	 * @throws ilCloudException
 	 */
 	public function deliverFile($path) {
-		$path = $this->urlencode(ltrim($path, "/"));
+		$path = ltrim($path, "/");
+		$encoded_path = $this->urlencode($path);
 
 		$headers = $this->getAuth()->getHeaders();
 
 		$settings = $this->getAuth()->getClientSettings();
-		$prop = array_shift($this->getWebDAVClient()->propFind($settings['baseUri'] . $path, array(), 1, $headers));
+		$prop = array_shift($this->getWebDAVClient()->propFind($settings['baseUri'] . $encoded_path, array(), 1, $headers));
 
 		header("Content-type: " . $prop['{DAV:}getcontenttype']);
 		header("Content-Length: " . $prop['{DAV:}getcontentlength']);
@@ -145,7 +146,7 @@ class ownclClient {
 		);
 
 		$context = stream_context_create($opts);
-		$file = &fopen($settings['baseUri'] . $path, "rb", false, $context);
+		$file = &fopen($settings['baseUri'] . $encoded_path, "rb", false, $context);
 		fpassthru($file);
 		exit();
 	}

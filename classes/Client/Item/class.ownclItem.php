@@ -89,7 +89,7 @@ abstract class ownclItem {
 	 * @return string
 	 */
 	public function getEncodedFullPath() {
-		return rawurlencode($this->getFullPath());
+		return $this->urlencode($this->getFullPath());
 	}
 
 
@@ -279,5 +279,16 @@ abstract class ownclItem {
 		$func = create_function('$c', 'return "_" . strtolower($c[1]);');
 
 		return preg_replace_callback('/([A-Z])/', $func, $str);
+	}
+
+	/**
+	 * urlencode without encoding slashes
+	 *
+	 * @param $str
+	 *
+	 * @return mixed
+	 */
+	protected function urlencode($str) {
+		return str_replace('%2F', '/', rawurlencode($str));
 	}
 }
