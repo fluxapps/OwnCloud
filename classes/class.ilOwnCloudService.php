@@ -72,13 +72,12 @@ class ilOwnCloudService extends ilCloudPluginService {
 				$file_tree->addNode($item->getFullPath(), $k . $item->getId(), $is_dir, strtotime($item->getDateTimeLastModified()), $size);
 			}
 		} catch (Exception $e) {
-			if ($this->getPluginObject()->getCloudModulObject()->getAuthComplete()) {
-				global $ilCtrl;
+			if ($this->getPluginObject()->getCloudModulObject()->getAuthComplete() && $e->getMessage() == 'HTTP error: 401') {
 				$this->getPluginObject()->getCloudModulObject()->setAuthComplete(false);
 				$this->getPluginObject()->getCloudModulObject()->update();
-				$ilCtrl->redirectByClass($_GET['cmdClass'], $_GET['cmd']);
+				throw new Exception($this->getPluginHookObject()->txt('not_authorized'));
 			}
-			throw $e;
+			throw new Exception($this->getPluginHookObject()->txt('no_connection'));
 		}
 	}
 
