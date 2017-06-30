@@ -69,7 +69,9 @@ class ownclTreeGUI extends ilTreeExplorerGUI{
 	 */
 	function getNodeContent($node)
 	{
-		$node->getName() ? $name = $node->getName() : $name = 'OwnCloud';
+		$config = new ownclConfig();
+
+		$node->getName() ? $name = $node->getName() : $name = $config->getServiceTitle();
 		return $name;
 	}
 
