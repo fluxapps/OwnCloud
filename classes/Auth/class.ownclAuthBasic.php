@@ -58,6 +58,7 @@ class ownclAuthBasic implements ownclAuth {
 		return true;
 	}
 
+
 	public function initPluginSettings(&$form) {
 		global $lng;
 		$section = new ilFormSectionHeaderGUI();

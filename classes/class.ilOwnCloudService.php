@@ -64,20 +64,11 @@ class ilOwnCloudService extends ilCloudPluginService {
 	 * @throws Exception
 	 */
 	public function addToFileTree(ilCloudFileTree $file_tree, $parent_folder = "/") {
-		try {
-			$files = $this->getClient()->listFolder($parent_folder);
-			foreach ($files as $k => $item) {
-				$size = ($item instanceof ownclFile) ? $size = $item->getSize() : NULL;
-				$is_dir = $item instanceof ownclFolder;
-				$file_tree->addNode($item->getFullPath(), $k . $item->getId(), $is_dir, strtotime($item->getDateTimeLastModified()), $size);
-			}
-		} catch (Exception $e) {
-			if ($this->getPluginObject()->getCloudModulObject()->getAuthComplete() && $e->getMessage() == 'HTTP error: 401') {
-				$this->getPluginObject()->getCloudModulObject()->setAuthComplete(false);
-				$this->getPluginObject()->getCloudModulObject()->update();
-				throw new Exception($this->getPluginHookObject()->txt('not_authorized'));
-			}
-			throw new Exception($this->getPluginHookObject()->txt('no_connection'));
+		$files = $this->getClient()->listFolder($parent_folder);
+		foreach ($files as $k => $item) {
+			$size = ($item instanceof ownclFile) ? $size = $item->getSize() : NULL;
+			$is_dir = $item instanceof ownclFolder;
+			$file_tree->addNode($item->getFullPath(), $k . $item->getId(), $is_dir, strtotime($item->getDateTimeLastModified()), $size);
 		}
 	}
 

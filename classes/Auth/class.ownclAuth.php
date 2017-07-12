@@ -25,7 +25,6 @@ interface ownclAuth {
 	 */
 	public function afterAuthentication($object);
 
-
 	/**
 	 * @return array
 	 */

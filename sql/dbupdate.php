@@ -57,31 +57,54 @@ if ($base_url = $config->getValue(ownclConfig::F_BASEURL)) {
 ?>
 <#5>
 <?php
-if (!$ilDB->tableColumnExists('cld_cldh_owncld_props', 'access_token')) {
-	$ilDB->addTableColumn('cld_cldh_owncld_props', 'access_token', array(
-		'type' => 'text',
-		'length' => 2000,
-	));
+//if (!$ilDB->tableColumnExists('cld_cldh_owncld_props', 'access_token')) {
+//	$ilDB->addTableColumn('cld_cldh_owncld_props', 'access_token', array(
+//		'type' => 'text',
+//		'length' => 2000,
+//	));
+//}
+//
+//if (!$ilDB->tableColumnExists('cld_cldh_owncld_props', 'refresh_token')) {
+//	$ilDB->addTableColumn('cld_cldh_owncld_props', 'refresh_token', array(
+//		'type' => 'text',
+//		'length' => 2000,
+//	));
+//}
+//
+//if (!$ilDB->tableColumnExists('cld_cldh_owncld_props', 'valid_through')) {
+//	$ilDB->addTableColumn('cld_cldh_owncld_props', 'valid_through', array(
+//		'type' => 'integer',
+//		'length' => 8,
+//	));
+//}
+//
+//if (!$ilDB->tableColumnExists('cld_cldh_owncld_props', 'validation_user_id')) {
+//	$ilDB->addTableColumn('cld_cldh_owncld_props', 'validation_user_id', array(
+//		'type' => 'integer',
+//		'length' => 8,
+//	));
+//}
+?>
+<#6>
+<?php
+if ($ilDB->tableColumnExists('cld_cldh_owncld_props', 'access_token')) {
+	$ilDB->dropTableColumn('cld_cldh_owncld_props', 'access_token');
 }
 
-if (!$ilDB->tableColumnExists('cld_cldh_owncld_props', 'refresh_token')) {
-	$ilDB->addTableColumn('cld_cldh_owncld_props', 'refresh_token', array(
-		'type' => 'text',
-		'length' => 2000,
-	));
+if ($ilDB->tableColumnExists('cld_cldh_owncld_props', 'refresh_token')) {
+	$ilDB->dropTableColumn('cld_cldh_owncld_props', 'refresh_token');
 }
 
-if (!$ilDB->tableColumnExists('cld_cldh_owncld_props', 'valid_through')) {
-	$ilDB->addTableColumn('cld_cldh_owncld_props', 'valid_through', array(
-		'type' => 'integer',
-		'length' => 8,
-	));
+if ($ilDB->tableColumnExists('cld_cldh_owncld_props', 'valid_through')) {
+	$ilDB->dropTableColumn('cld_cldh_owncld_props', 'valid_through');
 }
 
-if (!$ilDB->tableColumnExists('cld_cldh_owncld_props', 'validation_user_id')) {
-	$ilDB->addTableColumn('cld_cldh_owncld_props', 'validation_user_id', array(
-		'type' => 'integer',
-		'length' => 8,
-	));
+if ($ilDB->tableColumnExists('cld_cldh_owncld_props', 'validation_user_id')) {
+	$ilDB->dropTableColumn('cld_cldh_owncld_props', 'validation_user_id');
 }
+?>
+<#7>
+<?php
+require_once 'Customizing/global/plugins/Modules/Cloud/CloudHook/OwnCloud/classes/Auth/Token/class.ownclOAuth2UserToken.php';
+ownclOAuth2UserToken::updateDB();
 ?>

@@ -27,7 +27,7 @@ class ownclClient {
 	 * @var ownclConfig
 	 */
 	protected $config;
-	const DEBUG = false;
+	const DEBUG = true;
 
 
 	/**
@@ -68,6 +68,20 @@ class ownclClient {
 		}
 
 		return ($response['statusCode'] < 400);
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function getHTTPStatus() {
+		try {   //sabredav version 1.8 throws exception on missing connection
+			$response = $this->getWebDAVClient()->request('GET', '', null, $this->getAuth()->getHeaders());
+		} catch (Exception $e) {
+			return false;
+		}
+
+		return $response['statusCode'];
 	}
 
 
