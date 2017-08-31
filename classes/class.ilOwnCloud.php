@@ -113,6 +113,11 @@ class ilOwnCloud extends ilCloudPlugin {
 	public function getOwnCloudApp() {
 		$app = ilOwnCloudPlugin::getInstance()->getOwnCloudApp($this);
 
+		$config = new ownclConfig();
+		if (!$config->getOAuth2Active()) {
+			return $app;
+		}
+
 		$status = $app->getOwnCloudClient()->getHTTPStatus();
 		if ($status == 401 && $this->getCloudModulObject()->getAuthComplete()) {
 			$this->getCloudModulObject()->setAuthComplete(false);
