@@ -118,6 +118,7 @@ class ilOwnCloud extends ilCloudPlugin {
 			return $app;
 		}
 
+		$app->getOwnclAuth()->checkAndRefreshAuthentication();
 		$status = $app->getOwnCloudClient()->getHTTPStatus();
 		if ($status == 401 && $this->getCloudModulObject()->getAuthComplete()) {
 			$this->getCloudModulObject()->setAuthComplete(false);
