@@ -1,0 +1,76 @@
+<?php
+/* Copyright (c) 1998-2009 ILIAS open source, Extended GPL, see docs/LICENSE */
+if (PHP_VERSION_ID < 50400) {   //sabredav 3.0 is not supported for php version < 5.4
+	require_once(dirname(dirname(dirname(__DIR__))) . '/lib/SabreDAV-1.8.12/vendor/autoload.php');
+} else {
+	require_once(dirname(dirname(dirname(__DIR__))) . '/lib/SabreDAV-3.0.0/vendor/autoload.php');
+}
+use Sabre\DAV\Client;
+use Sabre\HTTP;
+/**
+ * Class DAVClient
+ *
+ * @author  Theodor Truffer <tt@studer-raimann.ch>
+ */
+class DAVClient extends Client{
+
+	function propFind($url, array $properties, $depth = 0) {
+		$additional_headers = func_get_arg(3);
+
+		$dom = new \DOMDocument('1.0', 'UTF-8');
+		$dom->formatOutput = true;
+		$root = $dom->createElementNS('DAV:', 'd:propfind');
+		$prop = $dom->createElement('d:prop');
+
+		foreach ($properties as $property) {
+
+			list(
+				$namespace,
+				$elementName
+				) = \Sabre\Xml\Service::parseClarkNotation($property);
+
+			if ($namespace === 'DAV:') {
+				$element = $dom->createElement('d:' . $elementName);
+			} else {
+				$element = $dom->createElementNS($namespace, 'x:' . $elementName);
+			}
+
+			$prop->appendChild($element);
+		}
+
+		$dom->appendChild($root)->appendChild($prop);
+		$body = $dom->saveXML();
+
+		$url = $this->getAbsoluteUrl($url);
+
+		$request = new HTTP\Request('PROPFIND', $url, [
+				'Depth'        => $depth,
+				'Content-Type' => 'application/xml'
+			] + $additional_headers, $body);
+
+		$response = $this->send($request);
+
+		if ((int)$response->getStatus() >= 400) {
+			throw new Exception('HTTP error: ' . $response->getStatus());
+		}
+
+		$result = $this->parseMultiStatus($response->getBodyAsString());
+
+		// If depth was 0, we only return the top item
+		if ($depth === 0) {
+			reset($result);
+			$result = current($result);
+			return isset($result[200]) ? $result[200] : [];
+		}
+
+		$newResult = [];
+		foreach ($result as $href => $statusList) {
+
+			$newResult[$href] = isset($statusList[200]) ? $statusList[200] : [];
+
+		}
+
+		return $newResult;
+
+	}
+}

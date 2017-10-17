@@ -1,24 +1,32 @@
 <?php
-include_once("./Services/UIComponent/Explorer2/classes/class.ilExplorerBaseGUI.php");
+include_once("./Services/UIComponent/Explorer2/classes/class.ilTreeExplorerGUI.php");
 
 /**
  * Class ownclTreeGUI
  *
  * @author  Theodor Truffer <tt@studer-raimann.ch>
  */
-class ownclTreeGUI extends ilExplorerBaseGUI {
+class ownclTreeGUI extends ilTreeExplorerGUI{
 
 	/**
 	 * @var ownclTree
 	 */
 	protected $tree;
+	/**
+	 * @var ilLog
+	 */
+	protected $log;
 
+	public function __construct($a_expl_id, $a_parent_obj, $a_parent_cmd, ownclTree $tree){
+		global $tpl, $ilLog;
+		parent::__construct($a_expl_id, $a_parent_obj, $a_parent_cmd, $tree);
+		$this->setSkipRootNode(false);
+		$this->setPreloadChilds(false);
+		$this->setAjax(true);
 
-	public function __construct($a_expl_id, $a_parent_obj, $a_parent_cmd, ownclTree $tree) {
-		global $tpl;
-		parent::__construct($a_expl_id, $a_parent_obj, $a_parent_cmd);
-		$this->tree = $tree;
-		$css = '.jstree a.clickable_node {
+		$this->log = $ilLog;
+		$css =
+			'.jstree a.clickable_node {
                color:black !important;
              }
 
@@ -28,42 +36,65 @@ class ownclTreeGUI extends ilExplorerBaseGUI {
 		$tpl->addInlineCss($css);
 	}
 
+	/**
+	 * Get node icon
+	 *
+	 * @param array $a_node node data
+	 * @return string icon path
+	 */
+	function getNodeIcon($a_node)
+	{
+		if($a_node->getType() == ownclItem::TYPE_FILE){
+			$img = 'icon_dcl_file.svg';
+		}else{
+			$img = 'icon_dcl_fold.svg';
+		}
+		return  ilUtil::getImagePath($img);
+	}
+
+	/**
+	 * Get node icon alt attribute
+	 *
+	 * @param mixed $a_node node object/array
+	 * @return string image alt attribute
+	 */
+	function getNodeIconAlt($a_node)
+	{
+		return '';
+	}
 
 	/**
 	 * @param mixed $node
-	 *
 	 * @return string
 	 */
-	function getNodeContent($node) {
-		if ($node->getType() == ownclItem::TYPE_FILE) {
-			$img = 'icon_dcl_file.svg';
-		} else {
-			$img = 'icon_dcl_fold.svg';
-		}
-		$node->getName() ? $name = $node->getName() : $name = 'OwnCloud';
-		if ($this->isNodeClickable($node)) {
-			$name = '<a class="clickable_node" href="' . $this->getNodeHref($node) . '">' . $name . '</>';
-		}
+	function getNodeContent($node)
+	{
+		$config = new ownclConfig();
 
-		return ilUtil::img(ilUtil::getImagePath($img)) . " " . $name;
+		$node->getName() ? $name = $node->getName() : $name = $config->getServiceTitle();
+		return $name;
 	}
 
-
-	function getNodeHref($node) {
+	function getNodeHref($node){
 		global $ilCtrl;
-		if ($node->getType() == ownclItem::TYPE_FILE) {
-			return '';
-		}
-		$ilCtrl->setParameterByClass($this->parent_obj, 'root_path', $node->getFullPath());
-
-		return $ilCtrl->getLinkTargetByClass($this->parent_obj, $this->parent_cmd);
+		$ilCtrl->setParameter($this->parent_obj, 'root_path', $this->urlencode($node->getFullPath()));
+		return $ilCtrl->getLinkTarget($this->parent_obj, 'editSettings');
 	}
 
+	/**
+	 * urlencode without encoding slashes
+	 *
+	 * @param $str
+	 *
+	 * @return mixed
+	 */
+	protected function urlencode($str) {
+		return str_replace('%2F', '/', rawurlencode($str));
+	}
 
-	function isNodeClickable($node) {
+	function isNodeClickable($node){
 		return ($node->getType() == ownclItem::TYPE_FOLDER);
 	}
-
 
 	/**
 	 * Get root node.
@@ -73,41 +104,21 @@ class ownclTreeGUI extends ilExplorerBaseGUI {
 	 *
 	 * @return mixed root node object/array
 	 */
-	function getRootNode() {
+	function getRootNode()
+	{
 		return $this->tree->getRootNode();
 	}
-
-
-	/**
-	 * Get childs of node
-	 *
-	 * @param string $a_parent_id parent node id
-	 *
-	 * @return array childs
-	 */
-	function getChildsOfNode($a_parent_node_id) {
-		$node = $this->tree->getNode($a_parent_node_id);
-		if ($node->getType() == ownclItem::TYPE_FILE) {
-			return array();
-		}
-		$child_ids = $node->getChilds();
-		$childs = array();
-		foreach ($child_ids as $id) {
-			$childs[] = $this->tree->getNode($id);
-		}
-
-		return $childs;
-	}
-
 
 	/**
 	 * Get id of a node
 	 *
 	 * @param mixed $a_node node array or object
-	 *
 	 * @return string id of node
 	 */
-	function getNodeId($a_node) {
-		return $a_node->getId();
+	function getNodeId($a_node)
+	{
+		return $a_node->getFullPath();
 	}
+
+
 }

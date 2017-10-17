@@ -45,9 +45,13 @@ class ownclApp {
 	 */
 	protected $owncl_client;
 	/**
-	 * @var int
+	 * @var ownclAuth
 	 */
-	protected $il_own_cloud;
+	protected $owncl_auth;
+	/**
+	 * @var ilOwnCloud
+	 */
+	protected $ilOwnCloud;
 	/**
 	 * @var
 	 */
@@ -60,18 +64,30 @@ class ownclApp {
 
 	protected function __construct() {
 		$ownclClient = new ownclClient($this);
-		$this->setOwnCloudlClient($ownclClient);
+		$this->setOwnCloudClient($ownclClient);
+		$this->initAuth();
+	}
+
+	protected function initAuth() {
+		$config = new ownclConfig();
+		if ($config->getOAuth2Active()) {
+			require_once 'Customizing/global/plugins/Modules/Cloud/CloudHook/OwnCloud/classes/Auth/class.ownclAuthOAuth2.php';
+			$this->owncl_auth = new ownclAuthOAuth2($this);
+		} else {
+			require_once 'Customizing/global/plugins/Modules/Cloud/CloudHook/OwnCloud/classes/Auth/class.ownclAuthBasic.php';
+			$this->owncl_auth = new ownclAuthBasic($this);
+		}
 	}
 
 
 	/**
 	 * @return ownclApp
 	 */
-	public static function getInstance() {
+	public static function getInstance($ilOwnCloud = null) {
 		if (!isset(self::$instance)) {
-			self::$instance = new self();
+			self::$instance = new self($ilOwnCloud);
 		}
-
+		self::$instance->setOwnCloud($ilOwnCloud);
 		return self::$instance;
 	}
 
@@ -97,11 +113,20 @@ class ownclApp {
 
 
 	/**
-	 * @param ilOwnCloud $il_own_cloud
+	 * @param ilOwnCloud|null $il_own_cloud
 	 */
-	public function setOwnCloud(ilOwnCloud $il_own_cloud) {
-		$this->il_own_cloud = $il_own_cloud;
+	public function setOwnCloud($il_own_cloud) {
+		$this->ilOwnCloud = $il_own_cloud;
 	}
+
+
+	/**
+	 * @return ilOwnCloud
+	 */
+	public function getIlOwnCloud() {
+		return $this->ilOwnCloud;
+	}
+
 
 
 	/**
@@ -115,8 +140,24 @@ class ownclApp {
 	/**
 	 * @param ownclClient $owncl_client
 	 */
-	public function setOwnCloudlClient($owncl_client) {
+	public function setOwnCloudClient($owncl_client) {
 		$this->owncl_client = $owncl_client;
+	}
+
+
+	/**
+	 * @return ownclAuth
+	 */
+	public function getOwnclAuth() {
+		return $this->owncl_auth;
+	}
+
+
+	/**
+	 * @param ownclAuth $owncl_auth
+	 */
+	public function setOwnclAuth($owncl_auth) {
+		$this->owncl_auth = $owncl_auth;
 	}
 
 

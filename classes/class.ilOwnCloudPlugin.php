@@ -50,8 +50,8 @@ if (!class_exists('ilOwnCloudPlugin')) {
 		/**
 		 * @return ownclApp
 		 */
-		public function getOwnCloudApp() {
-			return ownclApp::getInstance();
+		public function getOwnCloudApp($ilOwnCloud = null) {
+			return ownclApp::getInstance($ilOwnCloud);
 		}
 	}
 }

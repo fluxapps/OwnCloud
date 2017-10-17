@@ -27,7 +27,15 @@ class ilOwnCloudConfigGUI extends ilCloudPluginConfigGUI {
 		return array(
 			ownclConfig::F_TITLE => array('type' => self::IL_TEXT_INPUT_GUI, 'required' => true, 'subelements' => NULL),
 			ownclConfig::F_DESCRIPTION => array('type' => self::IL_TEXTAREA_INPUT_GUI, 'required' => false, 'subelements' => NULL),
-			ownclConfig::F_BASEURL => array( 'type' => self::IL_TEXT_INPUT_GUI, 'required' => true, 'subelements' => NULL ),
+			ownclConfig::F_SERVER_URL => array( 'type' => self::IL_TEXT_INPUT_GUI, 'required' => true, 'subelements' => NULL ),
+			ownclConfig::F_WEBDAV_PATH => array( 'type' => self::IL_TEXT_INPUT_GUI, 'required' => false, 'subelements' => NULL,
+				"info" => sprintf($this->plugin_object->txt("cfg_default_info"), ownclConfig::DEFAULT_WEBDAV_PATH)),
+			ownclConfig::F_OAUTH2_ACTIVE => array( 'type' => self::IL_CHECKBOX_INPUT_GUI, 'required' => false, 'subelements' => array(
+				ownclConfig::F_OAUTH2_CLIENT_ID => array( 'type' => self::IL_TEXT_INPUT_GUI, 'required' => true, 'subelements' => NULL),
+				ownclConfig::F_OAUTH2_CLIENT_SECRET => array( 'type' => self::IL_TEXT_INPUT_GUI, 'required' => true, 'subelements' => NULL),
+				ownclConfig::F_OAUTH2_PATH => array( 'type' => self::IL_TEXT_INPUT_GUI, 'required' => false, 'subelements' => NULL,
+					"info" => sprintf($this->plugin_object->txt("cfg_default_info"), ownclConfig::DEFAULT_OAUTH2_PATH)),
+			))
 		);
 	}
 
@@ -44,12 +52,14 @@ class ilOwnCloudConfigGUI extends ilCloudPluginConfigGUI {
 				$field->setOptions($item['options']);
 			}
 			if (isset($item["info"])) {
-				$field->setInfo($this->plugin_object->txt($item["info"]));
+				$field->setInfo($item["info"]);
 			}
 			if (is_array($item["subelements"])) {
 				foreach ($item["subelements"] as $subkey => $subitem) {
 					$subfield = new $subitem["type"]($this->plugin_object->txt('cfg_' . $key . "_" . $subkey), $key . "_" . $subkey);
-					$subfield->setInfo($this->plugin_object->txt($subitem["info"]));
+					if (isset($subitem["info"])) {
+						$subfield->setInfo($subitem["info"]);
+					}
 					$field->addSubItem($subfield);
 				}
 			}

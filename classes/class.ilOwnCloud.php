@@ -1,5 +1,6 @@
 <?php
 require_once('./Modules/Cloud/classes/class.ilCloudPlugin.php');
+require_once('Auth/Token/class.ownclOAuth2UserToken.php');
 
 /**
  * Class ilOwnCloud
@@ -20,7 +21,10 @@ class ilOwnCloud extends ilCloudPlugin {
 	 * @var String
 	 */
 	protected $password;
-
+	/**
+	 * @var ilObjUser
+	 */
+	protected $user;
 
 	/**
 	 * @param      $service_name
@@ -30,6 +34,8 @@ class ilOwnCloud extends ilCloudPlugin {
 	 * @throws ilCloudException
 	 */
 	public function __construct($service_name, $obj_id, $cloud_modul_object = NULL) {
+		global $ilUser;
+		$this->user = $ilUser;
 		parent::__construct('OwnCloud', $obj_id, $cloud_modul_object);
 	}
 
@@ -105,10 +111,30 @@ class ilOwnCloud extends ilCloudPlugin {
 	 * @throws ilCloudException
 	 */
 	public function getOwnCloudApp() {
-		$inst = ilOwnCloudPlugin::getInstance()->getOwnCloudApp();
+		$app = ilOwnCloudPlugin::getInstance()->getOwnCloudApp($this);
 
-		return $inst;
+		$config = new ownclConfig();
+		if (!$config->getOAuth2Active()) {
+			return $app;
+		}
+
+		$app->getOwnclAuth()->checkAndRefreshAuthentication();
+		$status = $app->getOwnCloudClient()->getHTTPStatus();
+		if ($status == 401 && $this->getCloudModulObject()->getAuthComplete()) {
+			$this->getCloudModulObject()->setAuthComplete(false);
+			$this->getCloudModulObject()->doUpdate();
+			if ($this->user->getId() != $this->getCloudModulObject()->getOwnerId()) {
+				throw new ilCloudException(ilCloudException::AUTHENTICATION_FAILED, 'Der Ordner kann zur Zeit nur vom Besitzer geöffnet werden.');
+			} else {
+				throw new ilCloudException(ilCloudException::AUTHENTICATION_FAILED, $this->getPluginHookObject()->txt('not_authorized'));
+			}
+		} else if ($status > 401 || $status == false) {
+			throw new ilCloudException(ilCloudException::AUTHENTICATION_FAILED, $this->getPluginHookObject()->txt('no_connection'));
+		}
+
+		return $app;
 	}
+
 
 
 	/**
@@ -157,4 +183,7 @@ class ilOwnCloud extends ilCloudPlugin {
 	public function getBaseUri() {
 		return $this->base_uri;
 	}
+
+
+
 }

@@ -22,7 +22,6 @@ class ilOwnCloudService extends ilCloudPluginService {
 		return $this->getPluginObject()->getOwnCloudApp();
 	}
 
-
 	/**
 	 * @return ownclClient
 	 */
@@ -31,18 +30,38 @@ class ilOwnCloudService extends ilCloudPluginService {
 	}
 
 
+	/**
+	 * @return ownclAuth
+	 */
+	public function getAuth() {
+		return $this->getApp()->getOwnclAuth();
+	}
+
+
+	/**
+	 * @param string $callback_url
+	 */
+	public function authService($callback_url = "") {
+		$this->getAuth()->authenticate(htmlspecialchars_decode($callback_url));
+	}
+
+
+	/**
+	 * @return bool
+	 */
 	public function afterAuthService() {
 		global $ilCtrl;
-		ilUtil::sendFailure($this->plugin_object->getPluginHookObject()->txt('msg_not_configured'), true);
 		$ilCtrl->setCmd('edit');
 
-		return true;
+		return $this->getAuth()->afterAuthentication($this->getPluginObject());
 	}
 
 
 	/**
 	 * @param ilCloudFileTree $file_tree
 	 * @param string          $parent_folder
+	 *
+	 * @throws Exception
 	 */
 	public function addToFileTree(ilCloudFileTree $file_tree, $parent_folder = "/") {
 		$files = $this->getClient()->listFolder($parent_folder);
