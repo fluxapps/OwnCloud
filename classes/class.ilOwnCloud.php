@@ -136,6 +136,26 @@ class ilOwnCloud extends ilCloudPlugin {
 	}
 
 
+	/**
+	 * returns all ids of owncloud objects owned by $owner_id
+	 * used to mark all these object as authenticated when this owner fetches an access token
+	 *
+	 * @return mixed
+	 */
+	public function getAllWithSameOwner() {
+		global $ilDB;
+		$res = $ilDB->query('SELECT id 
+					FROM object_data od 
+					INNER JOIN '.$this->getTableName().' oc ON od.obj_id = oc.id 
+					WHERE owner = ' . $this->getOwnerId());
+		$ids = array();
+		while ($rec = $ilDB->fetchAssoc($res)) {
+			$ids[] = $rec['id'];
+		}
+		return $ids;
+	}
+
+
 
 	/**
 	 * @param String $password

@@ -68,7 +68,7 @@ class ownclAuthOAuth2 implements ownclAuth {
 
 
 	public function checkAndRefreshAuthentication() {
-		if (!$this->getToken()->getAccessToken()) {
+		if (!$this->getToken()->getAccessToken() && !$this->getToken()->getRefreshToken()) {
 			return false;
 		}
 		if ($this->getToken()->isExpired()) {
@@ -158,6 +158,15 @@ class ownclAuthOAuth2 implements ownclAuth {
 			$token = unserialize(ilSession::get(self::AUTH_BEARER));
 			$this->getToken()->storeUserToken($token);
 		}
+
+		// since the auth token are per user and not per object,
+		// all objects of this user have to be marked as authenticated
+		foreach ($object->getAllWithSameOwner() as $obj_id) {
+			$ilObjCloud = new ilObjCloud($obj_id, false);
+			$ilObjCloud->setAuthComplete(true);
+			$ilObjCloud->update();
+		}
+
 		return true;
 	}
 
