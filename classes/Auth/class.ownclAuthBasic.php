@@ -29,7 +29,10 @@ class ownclAuthBasic implements ownclAuth {
 	}
 
 	public function getHeaders() {
-		return array();
+		$settings = $this->getClientSettings();
+		return array(
+			'Authorization' => 'Basic ' . base64_encode($settings['userName'].':'.$settings['password'])
+		);
 	}
 
 	/**
