@@ -2,6 +2,8 @@
 require_once(__DIR__ . '/Item/class.ownclItemFactory.php');
 require_once(dirname(__DIR__) . '/class.ownclConfig.php');
 require_once('DAVClient/DAVClient.php');
+require_once dirname(__DIR__) . '/class.ownclLog.php';
+
 /**
  * Class ownclClient
  *
@@ -78,6 +80,7 @@ class ownclClient {
 		try {   //sabredav version 1.8 throws exception on missing connection
 			$response = $this->getWebDAVClient()->request('GET', '', null, $this->getAuth()->getHeaders());
 		} catch (Exception $e) {
+		    ownclLog::getInstance()->write('Exception: Building connection to OwnCloud server failed with message: ' . $e->getMessage());
 			return false;
 		}
 

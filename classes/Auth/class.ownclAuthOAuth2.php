@@ -2,6 +2,7 @@
 /* Copyright (c) 1998-2009 ILIAS open source, Extended GPL, see docs/LICENSE */
 require_once(dirname(dirname(__DIR__)) . '/lib/vendor/autoload.php');
 require_once 'class.ownclAuth.php';
+require_once dirname(__DIR__) . '/class.ownclLog.php';
 require_once 'Provider/class.OAuth2Provider.php';
 require_once 'Services/Table/interfaces/interface.ilTableFilterItem.php';
 require_once 'Services/Form/classes/class.ilSubEnabledFormPropertyGUI.php';
@@ -69,13 +70,16 @@ class ownclAuthOAuth2 implements ownclAuth {
 
 	public function checkAndRefreshAuthentication() {
 		if (!$this->getToken()->getAccessToken() && !$this->getToken()->getRefreshToken()) {
+		    ownclLog::getInstance()->write('No access or refresh token found for user with id ' . $this->getToken()->getUserId());
 			return false;
 		}
 		if ($this->getToken()->isExpired()) {
 			try {
 				$this->refreshToken();
+				ownclLog::getInstance()->write('Token successfully refreshed for user with id ' . $this->getToken()->getUserId());
 				return true;
 			} catch (Exception $e) {
+			    ownclLog::getInstance()->write('Exception: Token refresh for user with id ' . $this->getToken()->getUserId() . ' failed with message: ' . $e->getMessage());
 				return false;
 			}
 		}

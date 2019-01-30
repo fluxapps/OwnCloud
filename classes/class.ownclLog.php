@@ -10,13 +10,13 @@ class ownclLog extends ilLog {
 
 	const OC_LOG = 'oc.log';
 	/**
-	 * @var swdrLog
+	 * @var ownclLog
 	 */
 	protected static $instance;
 
 
 	/**
-	 * @return swdrLog
+	 * @return ownclLog
 	 */
 	public static function getInstance() {
 		if (!isset(self::$instance)) {
