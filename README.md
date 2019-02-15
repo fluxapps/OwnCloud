@@ -12,7 +12,7 @@ Have a look at the [full Documentation](/doc/Documentation.pdf?raw=true)
 ### Adjustment suggestions
 * Adjustment suggestions by pull requests
 * Adjustment suggestions which are not yet worked out in detail by Jira tasks under https://jira.studer-raimann.ch/projects/PLOWNCLOUD
-* Bug reports under https://jira.studer-raimann.ch/projects/PLONEDRIVE
+* Bug reports under https://jira.studer-raimann.ch/projects/PLOWNCLOUD
 * For external users you can report it at https://plugins.studer-raimann.ch/goto.php?target=uihk_srsu_PLOWNCLOUD
 
 ### ILIAS Plugin SLA
