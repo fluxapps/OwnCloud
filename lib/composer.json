@@ -1,4 +1,7 @@
 {
+    "support": {
+    "issues": "https://plugins.studer-raimann.ch/goto.php?target=uihk_srsu_PLOWNCLOUD"
+  },
     "require": {
         "league/oauth2-client": "^2.2"
     }
