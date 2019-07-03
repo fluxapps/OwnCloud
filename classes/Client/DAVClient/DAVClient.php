@@ -1,10 +1,5 @@
 <?php
 /* Copyright (c) 1998-2009 ILIAS open source, Extended GPL, see docs/LICENSE */
-if (PHP_VERSION_ID < 50400) {   //sabredav 3.0 is not supported for php version < 5.4
-	require_once(dirname(dirname(dirname(__DIR__))) . '/lib/SabreDAV-1.8.12/vendor/autoload.php');
-} else {
-	require_once(dirname(dirname(dirname(__DIR__))) . '/lib/SabreDAV-3.0.0/vendor/autoload.php');
-}
 use Sabre\DAV\Client;
 use Sabre\HTTP;
 /**
@@ -12,7 +7,7 @@ use Sabre\HTTP;
  *
  * @author  Theodor Truffer <tt@studer-raimann.ch>
  */
-class DAVClient extends Client{
+class DAVClient extends Client {
 
 	function propFind($url, array $properties, $depth = 0) {
 		$additional_headers = func_get_arg(3);

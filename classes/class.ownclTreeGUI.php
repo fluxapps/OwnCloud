@@ -1,5 +1,4 @@
 <?php
-include_once("./Services/UIComponent/Explorer2/classes/class.ilTreeExplorerGUI.php");
 
 /**
  * Class ownclTreeGUI

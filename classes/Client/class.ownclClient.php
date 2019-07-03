@@ -1,8 +1,4 @@
 <?php
-require_once(__DIR__ . '/Item/class.ownclItemFactory.php');
-require_once(dirname(__DIR__) . '/class.ownclConfig.php');
-require_once('DAVClient/DAVClient.php');
-require_once dirname(__DIR__) . '/class.ownclLog.php';
 
 /**
  * Class ownclClient

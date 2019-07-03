@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(__DIR__) . '/Client/class.ownclClient.php');
 
 /**
  * Class ownclApp
