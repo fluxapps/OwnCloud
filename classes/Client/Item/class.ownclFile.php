@@ -1,5 +1,4 @@
 <?php
-require_once(__DIR__ . '/class.ownclItem.php');
 
 /**
  * Class ownclFile

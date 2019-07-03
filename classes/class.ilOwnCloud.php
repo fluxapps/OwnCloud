@@ -1,6 +1,4 @@
 <?php
-require_once('./Modules/Cloud/classes/class.ilCloudPlugin.php');
-require_once('Auth/Token/class.ownclOAuth2UserToken.php');
 
 /**
  * Class ilOwnCloud

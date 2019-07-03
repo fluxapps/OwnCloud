@@ -1,7 +1,5 @@
 <?php
-require_once("./Modules/Cloud/classes/class.ilCloudPluginService.php");
-require_once('./Modules/Cloud/exceptions/class.ilCloudException.php');
-require_once("./Modules/Cloud/classes/class.ilCloudUtil.php");
+require_once(__DIR__ . "/../vendor/autoload.php");
 
 /**
  * Class ilOwnCloudService

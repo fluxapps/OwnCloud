@@ -1,6 +1,4 @@
 <?php
-require_once(__DIR__ . '/class.ownclTree.php');
-require_once(__DIR__ . '/class.ownclTreeGUI.php');
 
 /**
  * Class ilOwnCloudSettingsGUI

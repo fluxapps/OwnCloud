@@ -7,17 +7,19 @@ use League\OAuth2\Client\Provider\GenericProvider;
  * @author  Theodor Truffer <tt@studer-raimann.ch>
  */
 class OAuth2Provider extends GenericProvider {
+
 	/**
-	 * Builds request options used for requesting an access token.
-	 *
-	 * @param  array $params
-	 * @return array
+	 * @param array $params
+	 * @return \Psr\Http\Message\RequestInterface
 	 */
-	protected function getAccessTokenOptions(array $params)
+	protected function getAccessTokenRequest(array $params)
 	{
-		$options = parent::getAccessTokenOptions($params);
+		$method  = $this->getAccessTokenMethod();
+		$url     = $this->getAccessTokenUrl($params);
+		$options = $this->optionProvider->getAccessTokenOptions($this->getAccessTokenMethod(), $params);
 		$options['headers']['Authorization'] = 'Basic ' . base64_encode($this->clientId.':'.$this->clientSecret);
-		return $options;
+
+		return $this->getRequest($method, $url, $options);
 	}
 
 }

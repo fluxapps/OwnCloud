@@ -1,6 +1,4 @@
 <?php
-require_once('./Modules/Cloud/classes/class.ilCloudPluginConfig.php');
-require_once(__DIR__ . '/class.ilOwnCloudPlugin.php');
 
 /**
  * Class ownclConfig

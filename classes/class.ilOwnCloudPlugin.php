@@ -1,6 +1,6 @@
 <?php
-require_once('./Modules/Cloud/classes/class.ilCloudHookPlugin.php');
-require_once(__DIR__ . '/App/class.ownclApp.php');
+require_once(__DIR__ . "/../vendor/autoload.php");
+
 
 if (!class_exists('ilOwnCloudPlugin')) {
 	/**

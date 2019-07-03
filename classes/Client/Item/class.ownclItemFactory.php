@@ -1,8 +1,4 @@
 <?php
-require_once(__DIR__ . '/class.ownclFolder.php');
-require_once(__DIR__ . '/class.ownclFile.php');
-require_once(__DIR__ . '/class.ownclItemCache.php');
-require_once('./Modules/Cloud/exceptions/class.ilCloudException.php');
 
 /**
  * Class ownclItemFactory

@@ -1,13 +1,5 @@
 <?php
 /* Copyright (c) 1998-2009 ILIAS open source, Extended GPL, see docs/LICENSE */
-require_once(dirname(dirname(__DIR__)) . '/lib/vendor/autoload.php');
-require_once 'class.ownclAuth.php';
-require_once dirname(__DIR__) . '/class.ownclLog.php';
-require_once 'Provider/class.OAuth2Provider.php';
-require_once 'Services/Table/interfaces/interface.ilTableFilterItem.php';
-require_once 'Services/Form/classes/class.ilSubEnabledFormPropertyGUI.php';
-require_once 'Services/Form/classes/class.ilNonEditableValueGUI.php';
-require_once 'Token/class.ownclOAuth2UserToken.php';
 /**
  * Class ownclAuthOAuth2
  *

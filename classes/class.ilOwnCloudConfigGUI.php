@@ -1,7 +1,5 @@
 <?php
-require_once(__DIR__ . '/App/class.ownclApp.php');
-require_once(__DIR__ . '/class.ownclConfig.php');
-require_once('./Modules/Cloud/classes/class.ilCloudPluginConfigGUI.php');
+require_once(__DIR__ . "/../vendor/autoload.php");
 
 /**
  * Class ilOwnCloudConfigGUI
