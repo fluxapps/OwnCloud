@@ -147,7 +147,7 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 
 		if ($_GET['action'] == 'choose_root') {
 			$ilCtrl->setParameter($this, "action", "choose_root");
-			return $this->showTreeView();
+			$this->showTreeView();
 		}
 
 		$this->setTabs();
@@ -206,8 +206,9 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 				return;
 			}
 			ilUtil::sendInfo($this->getPluginObject()->getPluginHookObject()->txt('choose_root'), true);
- 			$tree_html = $tree_gui->getHTML();
-			$tpl->setContent($tree_html);
+			$tpl->setContent($tree_gui->getHTML());
+			$tpl->show();
+			exit;
 		} else {
 			$ilCtrl->setParameter($this, 'active_subtab', 'general');
 			$ilCtrl->redirect($this, 'editSettings');

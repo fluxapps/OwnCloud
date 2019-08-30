@@ -16,19 +16,9 @@ class ownclTreeGUI extends ilTreeExplorerGUI{
 	 */
 	protected $log;
 
-    protected static $js_expl_path = "./Customizing/global/plugins/Modules/Cloud/CloudHook/OwnCloud/js/Explorer2.js";
-    protected static $js_tree_path = "./Customizing/global/plugins/Modules/Cloud/CloudHook/OwnCloud/libs/jstree/jquery.jstree.js";
-    protected static $js_tree_path_css = "./Customizing/global/plugins/Modules/Cloud/CloudHook/OwnCloud/libs/jstree/themes/default/style.css";
-
 	public function __construct($a_expl_id, $a_parent_obj, $a_parent_cmd, ownclTree $tree){
 		global $tpl, $ilLog;
-
-        ilExplorerBaseGUI::$js_expl_path = self::$js_expl_path;
-        ilExplorerBaseGUI::$js_tree_path = self::$js_tree_path;
-        ilExplorerBaseGUI::$js_tree_path_css = self::$js_tree_path_css;
-
 		parent::__construct($a_expl_id, $a_parent_obj, $a_parent_cmd, $tree);
-		$tpl->addCss('./libs/bower/jstree/themes/default/style.css');
 		$this->setSkipRootNode(false);
 		$this->setPreloadChilds(false);
 		$this->setAjax(true);
@@ -41,12 +31,7 @@ class ownclTreeGUI extends ilTreeExplorerGUI{
 
              .jstree a:hover {
                color:#b2052e !important;
-             }
-             
-             ul li a ins.jstree-icon {
-                display: none;
-             }
-             ';
+             }';
 		$tpl->addInlineCss($css);
 	}
 
