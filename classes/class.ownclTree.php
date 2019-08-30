@@ -22,9 +22,12 @@ class ownclTree {
 	}
 
 	function getRootNode(){
-		$root = new ownclFolder();
-		$root->setName('');
-		$root->setPath('/');
+	    static $root;
+	    if (!$root) {
+            $root = new ownclFolder();
+            $root->setName('');
+            $root->setPath('/');
+        }
 		return $root;
 	}
 
