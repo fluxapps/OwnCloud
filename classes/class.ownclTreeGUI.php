@@ -23,6 +23,9 @@ class ownclTreeGUI extends ilTreeExplorerGUI{
 		$this->setPreloadChilds(false);
 		$this->setAjax(true);
 
+		// necessary from 5.4 to fix bug where only root node shows
+        $this->setNodeOpen('/');
+
 		$this->log = $ilLog;
 		$css =
 			'.jstree a.clickable_node {
@@ -33,6 +36,11 @@ class ownclTreeGUI extends ilTreeExplorerGUI{
                color:#b2052e !important;
              }';
 		$tpl->addInlineCss($css);
+
+        // shows loading gif, which is hidden (hard-coded in tpl)
+        $container_outer_id = "il_expl2_jstree_cont_out_" . $this->getId();
+        $tpl->addOnLoadCode('$("#' . $container_outer_id . '").removeClass("ilNoDisplay");');
+
 	}
 
 	/**
