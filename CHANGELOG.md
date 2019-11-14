@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.2.2]
+* bugfix: fixed tree picker ('Choose folder')
+
 ## [2.2.1]
 * bugfix: fixed tree picker ('Choose folder')
 * mini feature: tree picker shows loading icon
