@@ -124,7 +124,7 @@ class ownclTreeGUI extends ilTreeExplorerGUI{
 	 */
 	function getNodeId($a_node)
 	{
-		return $a_node->getFullPath();
+		return str_replace("/", '__', $a_node->getFullPath());
 	}
 
 

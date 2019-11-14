@@ -18,7 +18,7 @@ class ownclTree {
 
 
 	public function getChilds($id, $order){
-		return $this->client->listFolder($id);
+		return $this->client->listFolder(str_replace('__', "/", $id));
 	}
 
 	function getRootNode(){
