@@ -58,7 +58,7 @@ abstract class ownclItem {
 	 */
 	public function loadFromProperties($web_url, $properties, $parent_id) {
 		$web_url = rawurldecode($web_url);
-		$this->setId(md5($web_url));
+		$this->setId($properties["{http://owncloud.org/ns}fileid"]);
 		$this->setParentId($parent_id);
 		$this->setWebUrl($web_url);
 		if ($this->getType() == self::TYPE_FOLDER) {

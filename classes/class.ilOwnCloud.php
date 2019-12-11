@@ -23,6 +23,10 @@ class ilOwnCloud extends ilCloudPlugin {
 	 * @var ilObjUser
 	 */
 	protected $user;
+    /**
+     * @var bool
+     */
+    protected $allow_open_in_owncloud;
 
 	/**
 	 * @param      $service_name
@@ -100,6 +104,10 @@ class ilOwnCloud extends ilCloudPlugin {
 				'text',
 				$this->getPassword()
 			),
+            'allow_open_in_owncloud' => array(
+                'integer',
+                $this->isAllowOpenInOwncloud()
+            )
 		);
 	}
 
@@ -202,6 +210,22 @@ class ilOwnCloud extends ilCloudPlugin {
 		return $this->base_uri;
 	}
 
+    /**
+     * @return bool
+     */
+    public function isAllowOpenInOwncloud()
+    {
+        return (bool) $this->allow_open_in_owncloud;
+    }
+
+
+    /**
+     * @param bool $allow_open_in_owncloud
+     */
+    public function setAllowOpenInOwncloud(bool $allow_open_in_owncloud)
+    {
+        $this->allow_open_in_owncloud = $allow_open_in_owncloud;
+    }
 
 
 }

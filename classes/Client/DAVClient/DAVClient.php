@@ -32,6 +32,8 @@ class DAVClient extends Client {
 
 			$prop->appendChild($element);
 		}
+		// $element = $dom->createElementNS('http://owncloud.org/ns', 'oc:id');
+		// $prop->appendChild($element);
 
 		$dom->appendChild($root)->appendChild($prop);
 		$body = $dom->saveXML();

@@ -16,10 +16,14 @@ class ownclConfig extends ilCloudPluginConfig {
 	const F_OAUTH2_CLIENT_ID = 'oauth2_client_id';
 	const F_OAUTH2_CLIENT_SECRET = 'oauth2_client_secret';
 	const F_OAUTH2_PATH = 'oauth2_path';
+    const F_COLLABORATION_APP_INTEGRATION = 'collaboration_app_integration';
+    const F_COLLABORATION_APP_URL = 'url';
+    const F_USER_MAPPING_FIELD = 'mapping_field';
 
 	const DEFAULT_WEBDAV_PATH = 'remote.php/webdav';
 	const DEFAULT_OAUTH2_PATH = 'index.php/apps/oauth2';
-	/**
+
+    /**
 	 * @var ilOwnCloudPlugin
 	 */
 	protected $pl;
@@ -137,6 +141,42 @@ class ownclConfig extends ilCloudPluginConfig {
 	public function getFullWebDAVPath() {
 		return rtrim($this->getServerURL(), '/') . '/' . rtrim(ltrim($this->getWebDAVPath(true), '/'), '/') . '/';
 	}
+
+
+    /**
+     * @param string $file_id
+     * @param string $file_path
+     *
+     * @return string|string[]
+     * @throws ilCloudPluginConfigException
+     */
+	public function getFullCollaborationAppPath($file_id, $file_path)
+    {
+	    $link = rtrim($this->getServerURL(), '/') . '/' . $this->getValue(self::F_COLLABORATION_APP_INTEGRATION . '_' . self::F_COLLABORATION_APP_URL);
+	    $link = str_replace('{FILE_ID}', $file_id, $link);
+	    $link = str_replace('{FILE_PATH}', $file_path, $link);
+	    return $link;
+    }
+
+
+    /**
+     * @param ilObjUser $user
+     *
+     * @return
+     * @throws ilCloudPluginConfigException
+     */
+    public function getMappingValueForUser($user)
+    {
+        $map_field = $this->getValue(self::F_COLLABORATION_APP_INTEGRATION . '_' . self::F_USER_MAPPING_FIELD);
+        switch ($map_field) {
+            case 'login':
+                return $user->getLogin();
+            case 'ext_account':
+                return $user->getExternalAccount();
+            case 'email':
+                return $user->getEmail();
+        }
+    }
 
 	/**
 	 * @param $key

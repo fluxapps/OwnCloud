@@ -1,5 +1,7 @@
 <?php
 
+use GuzzleHttp\Exception\GuzzleException;
+
 /**
  * Class ownclClient
  *
@@ -9,10 +11,15 @@ class ownclClient {
 
 	const AUTH_BEARER = 'auth_bearer';
 
+
 	/**
 	 * @var DAVClient
 	 */
 	protected $sabre_client;
+    /**
+     * @var ownclRESTClient
+     */
+	protected $rest_client;
 	/**
 	 * @var ownclApp
 	 */
@@ -58,6 +65,20 @@ class ownclClient {
 		return $this->sabre_client;
 	}
 
+
+    /**
+     * @return ownclRESTClient
+     * @throws ilCloudPluginConfigException
+     */
+	protected function getRESTClient()
+    {
+        if (!$this->rest_client) {
+            $this->rest_client = new ownclRESTClient($this->config);
+        }
+
+        return $this->rest_client;
+    }
+
 	public function hasConnection() {
 		try {   //sabredav version 1.8 throws exception on missing connection
 			$response = $this->getWebDAVClient()->request('GET', '', null, $this->getAuth()->getHeaders());
@@ -98,7 +119,20 @@ class ownclClient {
 		if ($client = $this->getWebDAVClient()) {
 			$ilLog->write('listFolder: ' . $settings['baseUri'] . $id);
 
-			$response = $client->propFind($settings['baseUri'] . $id, array(), 1, $this->getAuth()->getHeaders());
+			$response = $client->propFind(
+			    $settings['baseUri'] . $id,
+                [
+                    '{http://owncloud.org/ns}id',
+                    '{http://owncloud.org/ns}fileid',
+                    '{DAV:}getcontenttype',
+                    '{DAV:}getcontentlength',
+                    '{DAV:}getlastmodified',
+                    '{DAV:}getetag'
+                ],
+                1,
+                $this->getAuth()->getHeaders()
+            );
+			// $response = $client->propFind($settings['baseUri'] . $id, [], 1, $this->getAuth()->getHeaders());
 			$items = ownclItemFactory::getInstancesFromResponse($response);
 
 			return $items;
@@ -254,6 +288,8 @@ class ownclClient {
 	}
 
 
+
+
 	/**
 	 * @return ownclApp
 	 */
@@ -276,4 +312,21 @@ class ownclClient {
 	public function loadClient() {
 		$this->sabre_client = new DAVClient($this->getAuth()->getClientSettings());
 	}
+
+
+    /**
+     * @param string    $path
+     * @param ilObjUser $user
+     *
+     * @throws ilCloudPluginConfigException
+     * @throws GuzzleException
+     */
+    public function shareItem($path, $user)
+    {
+        $token = ownclOAuth2UserToken::getUserToken($this->getOwnCloudApp()->getIlOwnCloud()->getOwnerId());
+        if ($token) {
+            $user_string = $this->config->getMappingValueForUser($user);
+            $this->getRESTClient()->shareAPI($token)->create($path, $user_string);
+        }
+    }
 }

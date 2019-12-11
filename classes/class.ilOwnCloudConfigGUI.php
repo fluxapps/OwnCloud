@@ -19,23 +19,60 @@ class ilOwnCloudConfigGUI extends ilCloudPluginConfigGUI {
 	protected $form;
 
 	/**
-	 * @return array
-	 */
-	public function getFields() {
-		return array(
-			ownclConfig::F_TITLE => array('type' => self::IL_TEXT_INPUT_GUI, 'required' => true, 'subelements' => NULL),
-			ownclConfig::F_DESCRIPTION => array('type' => self::IL_TEXTAREA_INPUT_GUI, 'required' => false, 'subelements' => NULL),
-			ownclConfig::F_SERVER_URL => array( 'type' => self::IL_TEXT_INPUT_GUI, 'required' => true, 'subelements' => NULL ),
-			ownclConfig::F_WEBDAV_PATH => array( 'type' => self::IL_TEXT_INPUT_GUI, 'required' => false, 'subelements' => NULL,
-				"info" => sprintf($this->plugin_object->txt("cfg_default_info"), ownclConfig::DEFAULT_WEBDAV_PATH)),
-			ownclConfig::F_OAUTH2_ACTIVE => array( 'type' => self::IL_CHECKBOX_INPUT_GUI, 'required' => false, 'subelements' => array(
-				ownclConfig::F_OAUTH2_CLIENT_ID => array( 'type' => self::IL_TEXT_INPUT_GUI, 'required' => true, 'subelements' => NULL),
-				ownclConfig::F_OAUTH2_CLIENT_SECRET => array( 'type' => self::IL_TEXT_INPUT_GUI, 'required' => true, 'subelements' => NULL),
-				ownclConfig::F_OAUTH2_PATH => array( 'type' => self::IL_TEXT_INPUT_GUI, 'required' => false, 'subelements' => NULL,
-					"info" => sprintf($this->plugin_object->txt("cfg_default_info"), ownclConfig::DEFAULT_OAUTH2_PATH)),
-			))
-		);
-	}
+     * @return array
+     */
+    public function getFields()
+    {
+        global $DIC;
+
+        return array(
+            ownclConfig::F_TITLE                   => array('type' => self::IL_TEXT_INPUT_GUI, 'required' => true, 'subelements' => null),
+            ownclConfig::F_DESCRIPTION             => array('type' => self::IL_TEXTAREA_INPUT_GUI, 'required' => false, 'subelements' => null),
+            ownclConfig::F_SERVER_URL              => array('type' => self::IL_TEXT_INPUT_GUI, 'required' => true, 'subelements' => null),
+            ownclConfig::F_WEBDAV_PATH             => array(
+                'type'        => self::IL_TEXT_INPUT_GUI,
+                'required'    => false,
+                'subelements' => null,
+                "info"        => sprintf($this->plugin_object->txt("cfg_default_info"), ownclConfig::DEFAULT_WEBDAV_PATH)
+            ),
+            ownclConfig::F_OAUTH2_ACTIVE           => array(
+                'type'        => self::IL_CHECKBOX_INPUT_GUI,
+                'required'    => false,
+                'subelements' => array(
+                    ownclConfig::F_OAUTH2_CLIENT_ID     => array('type' => self::IL_TEXT_INPUT_GUI, 'required' => true, 'subelements' => null),
+                    ownclConfig::F_OAUTH2_CLIENT_SECRET => array('type' => self::IL_TEXT_INPUT_GUI, 'required' => true, 'subelements' => null),
+                    ownclConfig::F_OAUTH2_PATH          => array(
+                        'type'        => self::IL_TEXT_INPUT_GUI,
+                        'required'    => false,
+                        'subelements' => null,
+                        "info"        => sprintf($this->plugin_object->txt("cfg_default_info"), ownclConfig::DEFAULT_OAUTH2_PATH)
+                    ),
+                )
+            ),
+            ownclConfig::F_COLLABORATION_APP_INTEGRATION => array(
+                'type'        => self::IL_CHECKBOX_INPUT_GUI,
+                'required'    => false,
+                'info'        => $this->plugin_object->txt("cfg_" . ownclConfig::F_COLLABORATION_APP_INTEGRATION . '_info'),
+                'subelements' => array(
+                    ownclConfig::F_COLLABORATION_APP_URL => array(
+                        'type'     => self::IL_TEXT_INPUT_GUI,
+                        'required' => true,
+                        'info'     => $this->plugin_object->txt("cfg_" . ownclConfig::F_COLLABORATION_APP_INTEGRATION . '_' . ownclConfig::F_COLLABORATION_APP_URL . '_info')
+                    ),
+                    ownclConfig::F_USER_MAPPING_FIELD    => array(
+                        'type'     => self::IL_SELECT_INPUT_GUI,
+                        'required' => true,
+                        'info'     => $this->plugin_object->txt("cfg_" . ownclConfig::F_COLLABORATION_APP_INTEGRATION . '_' . ownclConfig::F_USER_MAPPING_FIELD . '_info'),
+                        'options'  => array(
+                            'login'       => $DIC->language()->txt('login'),
+                            'ext_account' => $DIC->language()->txt('user_ext_account'),
+                            'email'       => $DIC->language()->txt('email')
+                        )
+                    )
+                )
+            )
+        );
+    }
 
 
 	public function initConfigurationForm() {
@@ -55,9 +92,13 @@ class ilOwnCloudConfigGUI extends ilCloudPluginConfigGUI {
 			if (is_array($item["subelements"])) {
 				foreach ($item["subelements"] as $subkey => $subitem) {
 					$subfield = new $subitem["type"]($this->plugin_object->txt('cfg_' . $key . "_" . $subkey), $key . "_" . $subkey);
+                    if ($subitem["type"] == self::IL_SELECT_INPUT_GUI) {
+                        $subfield->setOptions($subitem['options']);
+                    }
 					if (isset($subitem["info"])) {
 						$subfield->setInfo($subitem["info"]);
 					}
+					$subfield->setRequired((bool)$subitem['required']);
 					$field->addSubItem($subfield);
 				}
 			}

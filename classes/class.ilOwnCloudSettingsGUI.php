@@ -62,6 +62,11 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 		$folder->setSize(50);
 		$this->form->addItem($folder);
 
+		if ($this->getAdminConfigObject()->getValue(ownclConfig::F_COLLABORATION_APP_INTEGRATION)) {
+			$open_in_owncloud = new ilCheckboxInputGUI($this->txt('allow_open_in_owncloud'), 'allow_open_in_owncloud');
+			$this->form->addItem($open_in_owncloud);
+		}
+
 		$this->getPluginObject()->getOwnCloudApp()->getOwnclAuth()->initPluginSettings($this->form);
 
 
@@ -70,6 +75,7 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 		$this->form->setTitle($lng->txt("cld_edit_Settings"));
 		$this->form->setFormAction($ilCtrl->getFormActionByClass("ilCloudPluginSettingsGUI"));
 	}
+
 
 
 	/**
@@ -101,12 +107,30 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 	}
 
 
+	/**
+	 * @param $values
+	 */
 	protected function getPluginSettingsValues(&$values) {
 		$values['username'] = $this->getPluginObject()->getUsername();
 		$values['password'] = $this->getPluginObject()->getPassword();
+		if ($this->getAdminConfigObject()->getValue(ownclConfig::F_COLLABORATION_APP_INTEGRATION)) {
+			$values['allow_open_in_owncloud'] = $this->getPluginObject()->isAllowOpenInOwncloud();
+		}
 	}
 
 
+	/**
+	 * @return ilOwnCloud
+	 */
+	public function getPluginObject()
+	{
+		return parent::getPluginObject();
+	}
+
+
+	/**
+	 * @throws ilCloudException
+	 */
 	public function updatePluginSettings() {
 		global $ilCtrl;
 
@@ -117,6 +141,9 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 
 		$this->getPluginObject()->setUsername($this->form->getInput("username"));
 		$this->getPluginObject()->setPassword($this->form->getInput("password"));
+		if ($this->getAdminConfigObject()->getValue(ownclConfig::F_COLLABORATION_APP_INTEGRATION)) {
+			$this->getPluginObject()->setAllowOpenInOwncloud($this->form->getInput("allow_open_in_owncloud"));
+		}
 		$this->getPluginObject()->doUpdate();
 
 		$client->loadClient();
@@ -164,14 +191,6 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI {
 		} catch (Exception $e) {
 			ilUtil::sendFailure($e->getMessage());
 		}
-	}
-
-
-	/**
-	 * @return ilOwnCloud
-	 */
-	public function getPluginObject() {
-		return parent::getPluginObject();
 	}
 
 

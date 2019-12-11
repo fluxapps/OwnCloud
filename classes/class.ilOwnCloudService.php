@@ -66,7 +66,7 @@ class ilOwnCloudService extends ilCloudPluginService {
 		foreach ($files as $k => $item) {
 			$size = ($item instanceof ownclFile) ? $size = $item->getSize() : NULL;
 			$is_dir = $item instanceof ownclFolder;
-			$file_tree->addNode($item->getFullPath(), $k . $item->getId(), $is_dir, strtotime($item->getDateTimeLastModified()), $size);
+			$file_tree->addNode($item->getFullPath(), $item->getId(), $is_dir, strtotime($item->getDateTimeLastModified()), $size);
 		}
 	}
 
