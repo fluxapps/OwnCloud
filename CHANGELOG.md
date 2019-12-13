@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.3.0]
+* feature: open & edit documents in OwnCloud Collaboration App (e.g. OnlyOffice)
+
 ## [2.2.2]
 * bugfix: fixed tree picker ('Choose folder')
 
