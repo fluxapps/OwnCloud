@@ -1,11 +1,9 @@
 <?php
 
-use ILIAS\FileUpload\Location;
-
 /**
  * Class ilOwnCloudActionListGUI
  *
- * @author Theodor Truffer <tt@studer-raimann.ch>
+ * @author            Theodor Truffer <tt@studer-raimann.ch>
  *
  * @ilCtrl_IsCalledBy ilOwnCloudActionListGUI : ilObjCloudGUI
  */
@@ -15,39 +13,39 @@ class ilOwnCloudActionListGUI extends ilCloudPluginActionListGUI
     const CMD_OPEN_IN_COLLABORATION_APP = 'openInCollaborationApp';
     const ITEM_ID = 'item_id';
     const ITEM_PATH = 'item_path';
-
-
     /**
      * @var bool
      */
     protected $open_in_owncloud_active;
-
     /**
      * @var array
      */
-    protected static $only_office_formats = array(
-        'doc',
-        'docx',
-        'dot',
-        'dotx',
-        'odt',
-        'ott',
-        'rtf',
-        'txt',
-        'pdf',
-        'pdfa',
-        'html',
-        'epub',
-        'xps',
-        'djvu',
-        'djv'
-    );
+    protected static $only_office_formats
+        = array(
+            'doc',
+            'docx',
+            'dot',
+            'dotx',
+            'odt',
+            'ott',
+            'rtf',
+            'txt',
+            'pdf',
+            'pdfa',
+            'html',
+            'epub',
+            'xps',
+            'djvu',
+            'djv'
+        );
+
 
     /**
      * @return bool
      * @throws ilCloudException
      */
-    protected function addItemsAfter() {
+    protected function addItemsAfter()
+    {
         global $DIC;
         $format = strtolower(pathinfo($this->node->getPath(), PATHINFO_EXTENSION));
         if (!$this->node->getIsDir()
@@ -80,6 +78,7 @@ class ilOwnCloudActionListGUI extends ilCloudPluginActionListGUI
             $this->open_in_owncloud_active = $this->getAdminConfigObject()->getValue(ownclConfig::F_COLLABORATION_APP_INTEGRATION)
                 && $this->getPluginObject()->isAllowOpenInOwncloud();
         }
+
         return $this->open_in_owncloud_active;
     }
 

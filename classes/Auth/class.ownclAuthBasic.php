@@ -6,118 +6,131 @@
  *
  * @author  Theodor Truffer <tt@studer-raimann.ch>
  */
-class ownclAuthBasic implements ownclAuth {
+class ownclAuthBasic implements ownclAuth
+{
 
-	/**
-	 * @var ownclApp
-	 */
-	protected $app;
-	/**
-	 * @var ownclConfig
-	 */
-	protected $config;
+    /**
+     * @var ownclApp
+     */
+    protected $app;
+    /**
+     * @var ownclConfig
+     */
+    protected $config;
 
-	/**
-	 * ownclAuthBasic constructor.
-	 *
-	 * @param ownclApp $app
-	 */
-	public function __construct(ownclApp $app) {
-		$this->setApp($app);
-		$this->config = new ownclConfig();
-	}
 
-	public function getHeaders() {
-		$settings = $this->getClientSettings();
-		return array(
-			'Authorization' => 'Basic ' . base64_encode($settings['userName'].':'.$settings['password'])
-		);
-	}
+    /**
+     * ownclAuthBasic constructor.
+     *
+     * @param ownclApp $app
+     */
+    public function __construct(ownclApp $app)
+    {
+        $this->setApp($app);
+        $this->config = new ownclConfig();
+    }
+
+
+    public function getHeaders()
+    {
+        $settings = $this->getClientSettings();
+
+        return array(
+            'Authorization' => 'Basic ' . base64_encode($settings['userName'] . ':' . $settings['password'])
+        );
+    }
 
 
     /**
      * @return array
      * @throws ilCloudException
      */
-	public function getClientSettings() {
-		$obj_id = ilObject2::_lookupObjectId((int)$_GET['ref_id']);
-		$obj = new ilOwnCloud('OwnCloud', $obj_id);
+    public function getClientSettings()
+    {
+        $obj_id = ilObject2::_lookupObjectId((int) $_GET['ref_id']);
+        $obj = new ilOwnCloud('OwnCloud', $obj_id);
 
-		$settings = array(
-			'baseUri' => $this->config->getFullWebDAVPath(),
-			'userName' => $obj->getUsername(),
-			'password' => $obj->getPassword(),
-		);
+        $settings = array(
+            'baseUri'  => $this->config->getFullWebDAVPath(),
+            'userName' => $obj->getUsername(),
+            'password' => $obj->getPassword(),
+        );
 
-		return $settings;
-	}
-
-
-	public function authenticate($callback_url) {
-		header("Location: " . htmlspecialchars_decode($callback_url));
-	}
+        return $settings;
+    }
 
 
-	public function afterAuthentication($object) {
-		return true;
-	}
+    public function authenticate($callback_url)
+    {
+        header("Location: " . htmlspecialchars_decode($callback_url));
+    }
 
 
-	public function initPluginSettings(&$form) {
-		global $lng;
-		$section = new ilFormSectionHeaderGUI();
-		$section->setTitle($this->getApp()->getIlOwnCloud()->getCloudModulObject()->getServiceName()." ".$lng->txt("cld_service_specific_settings"));
-		$form->addItem($section);
-
-		$item = new ilTextInputGUI(ilOwnCloudPlugin::getInstance()->txt('username'), 'username');
-		$item->setRequired(true);
-		$form->addItem($item);
-		$title = $this->getApp()->getIlOwnCloud()->getAdminConfigObject()->getServiceTitle();
-		$item = new ilPasswordInputGUI(ilOwnCloudPlugin::getInstance()->txt('password'), 'password');
-		$item->setInfo(sprintf(ilOwnCloudPlugin::getInstance()->txt('password_info'), $title));
-		$item->setRetype(false);
-		$item->setRequired(true);
-		$form->addItem($item);
-
-		return true;
-	}
+    public function afterAuthentication($object)
+    {
+        return true;
+    }
 
 
-	public function checkAndRefreshAuthentication() {
-		return true;
-	}
+    public function initPluginSettings(&$form)
+    {
+        global $lng;
+        $section = new ilFormSectionHeaderGUI();
+        $section->setTitle($this->getApp()->getIlOwnCloud()->getCloudModulObject()->getServiceName() . " " . $lng->txt("cld_service_specific_settings"));
+        $form->addItem($section);
+
+        $item = new ilTextInputGUI(ilOwnCloudPlugin::getInstance()->txt('username'), 'username');
+        $item->setRequired(true);
+        $form->addItem($item);
+        $title = $this->getApp()->getIlOwnCloud()->getAdminConfigObject()->getServiceTitle();
+        $item = new ilPasswordInputGUI(ilOwnCloudPlugin::getInstance()->txt('password'), 'password');
+        $item->setInfo(sprintf(ilOwnCloudPlugin::getInstance()->txt('password_info'), $title));
+        $item->setRetype(false);
+        $item->setRequired(true);
+        $form->addItem($item);
+
+        return true;
+    }
 
 
-	/**
-	 * @return ownclApp
-	 */
-	public function getApp() {
-		return $this->app;
-	}
+    public function checkAndRefreshAuthentication()
+    {
+        return true;
+    }
 
 
-	/**
-	 * @param ownclApp $app
-	 */
-	public function setApp($app) {
-		$this->app = $app;
-	}
+    /**
+     * @return ownclApp
+     */
+    public function getApp()
+    {
+        return $this->app;
+    }
 
 
-	/**
-	 * @return ownclConfig
-	 */
-	public function getConfig() {
-		return $this->config;
-	}
+    /**
+     * @param ownclApp $app
+     */
+    public function setApp($app)
+    {
+        $this->app = $app;
+    }
 
 
-	/**
-	 * @param ownclConfig $config
-	 */
-	public function setConfig($config) {
-		$this->config = $config;
-	}
+    /**
+     * @return ownclConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
 
 
+    /**
+     * @param ownclConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
 }

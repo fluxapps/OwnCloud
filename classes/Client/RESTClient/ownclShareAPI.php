@@ -13,19 +13,16 @@ class ownclShareAPI
 
     const URI_SHARE_API = 'ocs/v1.php/apps/files_sharing/api/v1/shares';
     const FORMAT_PARAMETER = '?format=json';
-
     const SHARE_TYPE_USER = 0;
     const SHARE_TYPE_GROUP = 1;
     const SHARE_TYPE_PUBLIC_LINK = 3;
     const SHARE_TYPE_FEDERATED_CLOUD_SHARE = 6;
-
     const PERM_TYPE_READ = 1;
     const PERM_TYPE_UPDATE = 2;
     const PERM_TYPE_CREATE = 4;
     const PERM_TYPE_DELETE = 8;
     const PERM_TYPE_SHARE = 16;
     const PERM_TYPE_ALL = 31;
-
     /**
      * @var Client
      */
@@ -56,6 +53,7 @@ class ownclShareAPI
     public function all()
     {
         $response = $this->http_client->request('GET', self::URI_SHARE_API . self::FORMAT_PARAMETER, $this->getOptions());
+
         return json_decode($response->getBody()->getContents());
     }
 
@@ -71,13 +69,14 @@ class ownclShareAPI
     {
         $additional_options = [
             'form_params' => [
-                'path' => $path,
-                'shareType' => self::SHARE_TYPE_USER,
-                'shareWith' => $user,
+                'path'        => $path,
+                'shareType'   => self::SHARE_TYPE_USER,
+                'shareWith'   => $user,
                 'permissions' => self::PERM_TYPE_READ
             ]
         ];
         $response = $this->http_client->request('POST', self::URI_SHARE_API . self::FORMAT_PARAMETER, $this->getOptions($additional_options));
+
         return json_decode($response->getBody()->getContents());
     }
 

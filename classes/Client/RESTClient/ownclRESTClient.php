@@ -1,6 +1,8 @@
 <?php
- use GuzzleHttp\Client;
+
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class RESTClient
@@ -10,7 +12,6 @@ use GuzzleHttp\Exception\GuzzleException;
 class ownclRESTClient
 {
 
-
     /**
      * @var Client
      */
@@ -19,6 +20,7 @@ class ownclRESTClient
      * @var ownclConfig
      */
     protected $config;
+
 
     /**
      * RESTClient constructor.
@@ -50,14 +52,13 @@ class ownclRESTClient
     /**
      * @param string $uri
      *
-     * @return mixed|\Psr\Http\Message\ResponseInterface
+     * @return mixed|ResponseInterface
      * @throws GuzzleException
      */
     public function get($uri)
     {
         $response = $this->http_client->request('GET', $uri);
+
         return $response;
     }
-
-
 }
