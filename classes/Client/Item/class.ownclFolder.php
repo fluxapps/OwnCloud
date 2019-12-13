@@ -5,71 +5,79 @@
  *
  * @author  Theodor Truffer <tt@studer-raimann.ch>
  */
-class ownclFolder extends ownclItem {
+class ownclFolder extends ownclItem
+{
 
-	/**
-	 * @var int
-	 */
-	protected $type = self::TYPE_FOLDER;
-	/**
-	 * @var int
-	 */
-	protected $child_count = 0;
-	/**
-	 * @var array
-	 */
-	protected $childs;
-
-
-	/**
-	 * @return int
-	 */
-	public function getChildCount() {
-		return $this->child_count;
-	}
+    /**
+     * @var int
+     */
+    protected $type = self::TYPE_FOLDER;
+    /**
+     * @var int
+     */
+    protected $child_count = 0;
+    /**
+     * @var array
+     */
+    protected $childs;
 
 
-	/**
-	 * @param int $child_count
-	 */
-	public function setChildCount($child_count) {
-		$this->child_count = $child_count;
-	}
+    /**
+     * @return int
+     */
+    public function getChildCount()
+    {
+        return $this->child_count;
+    }
 
 
-	/**
-	 * @return int
-	 */
-	public function getType() {
-		return $this->type;
-	}
+    /**
+     * @param int $child_count
+     */
+    public function setChildCount($child_count)
+    {
+        $this->child_count = $child_count;
+    }
 
 
-	/**
-	 * @param int $type
-	 */
-	public function setType($type) {
-		$this->type = $type;
-	}
+    /**
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 
 
-	/**
-	 * @param array $childs
-	 */
-	public function setChilds($childs) {
-		$this->childs = $childs;
-	}
+    /**
+     * @param int $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
 
 
-	/**
-	 * @return array
-	 */
-	public function getChilds() {
-		return $this->childs;
-	}
+    /**
+     * @param array $childs
+     */
+    public function setChilds($childs)
+    {
+        $this->childs = $childs;
+    }
 
 
-	public function addChild($id) {
-		$this->childs[] = $id;
-	}
+    /**
+     * @return array
+     */
+    public function getChilds()
+    {
+        return $this->childs;
+    }
+
+
+    public function addChild($id)
+    {
+        $this->childs[] = $id;
+    }
 }

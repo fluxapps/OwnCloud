@@ -108,3 +108,19 @@ if ($ilDB->tableColumnExists('cld_cldh_owncld_props', 'validation_user_id')) {
 require_once 'Customizing/global/plugins/Modules/Cloud/CloudHook/OwnCloud/classes/Auth/Token/class.ownclOAuth2UserToken.php';
 ownclOAuth2UserToken::updateDB();
 ?>
+<#8>
+<?php
+include_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/OwnCloud/classes/class.ilOwnCloudPlugin.php");
+$plugin_object = ilOwnCloudPlugin::getInstance();
+/** @var $ilDB ilDBInterface */
+if (!$ilDB->tableColumnExists('cld_cldh_owncld_props', 'allow_open_in_owncloud')) {
+	$ilDB->addTableColumn(
+			'cld_cldh_owncld_props',
+			'allow_open_in_owncloud',
+			[
+				'type' => 'integer',
+                'length' => 1
+			]
+		);
+}
+?>

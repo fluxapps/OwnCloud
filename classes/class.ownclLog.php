@@ -5,56 +5,62 @@
  *
  * @author  Theodor Truffer <tt@studer-raimann.ch>
  */
-class ownclLog extends ilLog {
+class ownclLog extends ilLog
+{
 
-	const OC_LOG = 'oc.log';
-	/**
-	 * @var ownclLog
-	 */
-	protected static $instance;
-
-
-	/**
-	 * @return ownclLog
-	 */
-	public static function getInstance() {
-		if (!isset(self::$instance)) {
-			self::$instance = new self(ILIAS_LOG_DIR, self::OC_LOG);
-		}
-
-		return self::$instance;
-	}
+    const OC_LOG = 'oc.log';
+    /**
+     * @var ownclLog
+     */
+    protected static $instance;
 
 
-	function write($a_msg, $a_log_level = NULL) {
-		parent::write($a_msg, $a_log_level);
-	}
+    /**
+     * @return ownclLog
+     */
+    public static function getInstance()
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new self(ILIAS_LOG_DIR, self::OC_LOG);
+        }
+
+        return self::$instance;
+    }
 
 
-	/**
-	 * @return mixed
-	 */
-	public function getLogDir() {
-		return ILIAS_LOG_DIR;
-	}
+    function write($a_msg, $a_log_level = null)
+    {
+        parent::write($a_msg, $a_log_level);
+    }
 
 
-	/**
-	 * @return string
-	 */
-	public function getLogFile() {
-		return self::OC_LOG;
-	}
+    /**
+     * @return mixed
+     */
+    public function getLogDir()
+    {
+        return ILIAS_LOG_DIR;
+    }
 
 
-	/**
-	 * @return string
-	 */
-	public static function getFullPath() {
-		$log = self::getInstance();
+    /**
+     * @return string
+     */
+    public function getLogFile()
+    {
+        return self::OC_LOG;
+    }
 
-		return $log->getLogDir() . '/' . $log->getLogFile();
-	}
+
+    /**
+     * @return string
+     */
+    public static function getFullPath()
+    {
+        $log = self::getInstance();
+
+        return $log->getLogDir() . '/' . $log->getLogFile();
+    }
 }
 
 ?>
