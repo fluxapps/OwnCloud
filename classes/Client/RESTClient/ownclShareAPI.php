@@ -21,6 +21,7 @@ class ownclShareAPI
     const PERM_TYPE_UPDATE = 2;
     const PERM_TYPE_CREATE = 4;
     const PERM_TYPE_DELETE = 8;
+    const PERM_TYPE_READ_WRITE = 15;
     const PERM_TYPE_SHARE = 16;
     const PERM_TYPE_ALL = 31;
     /**
@@ -72,7 +73,7 @@ class ownclShareAPI
                 'path'        => $path,
                 'shareType'   => self::SHARE_TYPE_USER,
                 'shareWith'   => $user,
-                'permissions' => self::PERM_TYPE_READ
+                'permissions' => self::PERM_TYPE_UPDATE
             ]
         ];
         $response = $this->http_client->request('POST', self::URI_SHARE_API . self::FORMAT_PARAMETER, $this->getOptions($additional_options));
