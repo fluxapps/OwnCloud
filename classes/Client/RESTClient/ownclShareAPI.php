@@ -73,7 +73,7 @@ class ownclShareAPI
                 'path'        => $path,
                 'shareType'   => self::SHARE_TYPE_USER,
                 'shareWith'   => $user,
-                'permissions' => self::PERM_TYPE_UPDATE
+                'permissions' => self::PERM_TYPE_READ_WRITE
             ]
         ];
         $response = $this->http_client->request('POST', self::URI_SHARE_API . self::FORMAT_PARAMETER, $this->getOptions($additional_options));
