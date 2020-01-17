@@ -227,6 +227,7 @@ return array(
     'ownclLog' => $baseDir . '/classes/class.ownclLog.php',
     'ownclOAuth2UserToken' => $baseDir . '/classes/Auth/Token/class.ownclOAuth2UserToken.php',
     'ownclRESTClient' => $baseDir . '/classes/Client/RESTClient/ownclRESTClient.php',
+    'ownclShare' => $baseDir . '/classes/Client/Item/class.ownclShare.php',
     'ownclShareAPI' => $baseDir . '/classes/Client/RESTClient/ownclShareAPI.php',
     'ownclTree' => $baseDir . '/classes/class.ownclTree.php',
     'ownclTreeGUI' => $baseDir . '/classes/class.ownclTreeGUI.php',

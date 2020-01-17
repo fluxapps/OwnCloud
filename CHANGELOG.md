@@ -2,6 +2,7 @@
 
 ## [2.3.1]
 * bugfix: grant write permissions when opening in Collaboration App (not only read)
+* bugfix: update permissions if share already exists
 * improvement/feature: collaboration app - supported formats configurable
 
 ## [2.3.0]

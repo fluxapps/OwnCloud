@@ -340,7 +340,16 @@ class ownclClient
         $token = ownclOAuth2UserToken::getUserToken($this->getOwnCloudApp()->getIlOwnCloud()->getOwnerId());
         if ($token) {
             $user_string = $this->config->getMappingValueForUser($user);
-            $this->getRESTClient()->shareAPI($token)->create($path, $user_string);
+            $existing = $this->getRESTClient()->shareAPI($token)->getForPath($path);
+            foreach ($existing as $share) {
+                if ($share->getShareWith() === $user_string) {
+                    if (!$share->hasPermission(ownclShareAPI::PERM_TYPE_UPDATE)) {
+                        $this->getRESTClient()->shareAPI($token)->update($share->getId(), $share->getPermissions() | ownclShareAPI::PERM_TYPE_UPDATE);
+                    }
+                    return;
+                }
+            }
+            $this->getRESTClient()->shareAPI($token)->create($path, $user_string, ownclShareAPI::PERM_TYPE_UPDATE);
         }
     }
 }
