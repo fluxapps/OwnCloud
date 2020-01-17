@@ -65,8 +65,10 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI
         $folder->setSize(50);
         $this->form->addItem($folder);
 
+        // collaboration app
         if ($this->getAdminConfigObject()->getValue(ownclConfig::F_COLLABORATION_APP_INTEGRATION)) {
             $open_in_owncloud = new ilCheckboxInputGUI($this->txt('allow_open_in_owncloud'), 'allow_open_in_owncloud');
+            $open_in_owncloud->setInfo($this->txt('allow_open_in_owncloud_info'));
             $this->form->addItem($open_in_owncloud);
         }
 

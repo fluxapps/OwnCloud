@@ -17,27 +17,6 @@ class ilOwnCloudActionListGUI extends ilCloudPluginActionListGUI
      * @var bool
      */
     protected $open_in_owncloud_active;
-    /**
-     * @var array
-     */
-    protected static $only_office_formats
-        = array(
-            'doc',
-            'docx',
-            'dot',
-            'dotx',
-            'odt',
-            'ott',
-            'rtf',
-            'txt',
-            'pdf',
-            'pdfa',
-            'html',
-            'epub',
-            'xps',
-            'djvu',
-            'djv'
-        );
 
 
     /**
@@ -47,11 +26,7 @@ class ilOwnCloudActionListGUI extends ilCloudPluginActionListGUI
     protected function addItemsAfter()
     {
         global $DIC;
-        $format = strtolower(pathinfo($this->node->getPath(), PATHINFO_EXTENSION));
-        if (!$this->node->getIsDir()
-            && in_array($format, (new ownclConfig())->getCollaborationAppFormats())
-            && $this->isOpenInOwnCloudActive()
-        ) {
+        if ($this->checkHasAction()) {
             $DIC->ctrl()->setParameterByClass(ilCloudPluginActionListGUI::class, self::ITEM_ID, $this->node->getId());
             $DIC->ctrl()->setParameterByClass(ilCloudPluginActionListGUI::class, self::ITEM_PATH, urlencode($this->node->getPath()));
             $this->selection_list->addItem(
@@ -99,6 +74,22 @@ class ilOwnCloudActionListGUI extends ilCloudPluginActionListGUI
         $url = (new ownclConfig())->getFullCollaborationAppPath($id, urlencode($path));
         Header('Location: ' . $url);
         exit;
+    }
+
+
+    /**
+     * @return bool|void
+     * @throws ilCloudPluginConfigException
+     */
+    protected function checkHasAction()
+    {
+        global $DIC;
+        $upload_perm = $DIC->access()->checkAccess('upload', '', filter_input(INPUT_GET, 'ref_id', FILTER_SANITIZE_NUMBER_INT));
+        $format = strtolower(pathinfo($this->node->getPath(), PATHINFO_EXTENSION));
+        return $upload_perm
+            && !$this->node->getIsDir()
+            && in_array($format, (new ownclConfig())->getCollaborationAppFormats())
+            && $this->isOpenInOwnCloudActive();
     }
 
 

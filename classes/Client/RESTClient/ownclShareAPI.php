@@ -118,6 +118,14 @@ class ownclShareAPI
         return json_decode($response->getBody()->getContents());
     }
 
+
+    /**
+     * @param int $share_id
+     * @param int $permissions
+     *
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function update(int $share_id, int $permissions)
     {
         $additional_options = [

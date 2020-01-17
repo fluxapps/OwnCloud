@@ -35,5 +35,6 @@ cfg_collaboration_app_integration_mapping_field_info#:#Defines which user field 
 info_token_expires#:#Access-Token expires
 root_folder#:#Root Folder
 not_authorized#:#Authentication failed. Please reload the page to get redirected to the authentification point.
-allow_open_in_owncloud#:#Activate "Edit in OwnCloud"
+allow_open_in_owncloud#:#Activate "Edit in OwnCloud" for files
+allow_open_in_owncloud_info#:#This action will only be offered to users with the permission "Upload".
 open_in_owncloud#:#Edit in OwnCloud
