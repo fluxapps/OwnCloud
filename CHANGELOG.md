@@ -2,6 +2,7 @@
 
 ## [2.3.1]
 * bugfix: grant write permissions when opening in Collaboration App (not only read)
+* improvement/feature: collaboration app - supported formats configurable
 
 ## [2.3.0]
 * feature: open & edit documents in OwnCloud Collaboration App (e.g. OnlyOffice)

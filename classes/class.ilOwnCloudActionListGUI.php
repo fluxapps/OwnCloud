@@ -49,7 +49,7 @@ class ilOwnCloudActionListGUI extends ilCloudPluginActionListGUI
         global $DIC;
         $format = strtolower(pathinfo($this->node->getPath(), PATHINFO_EXTENSION));
         if (!$this->node->getIsDir()
-            && in_array($format, self::$only_office_formats)
+            && in_array($format, (new ownclConfig())->getCollaborationAppFormats())
             && $this->isOpenInOwnCloudActive()
         ) {
             $DIC->ctrl()->setParameterByClass(ilCloudPluginActionListGUI::class, self::ITEM_ID, $this->node->getId());
@@ -75,7 +75,7 @@ class ilOwnCloudActionListGUI extends ilCloudPluginActionListGUI
     protected function isOpenInOwnCloudActive()
     {
         if (is_null($this->open_in_owncloud_active)) {
-            $this->open_in_owncloud_active = $this->getAdminConfigObject()->getValue(ownclConfig::F_COLLABORATION_APP_INTEGRATION)
+            $this->open_in_owncloud_active = (new ownclConfig())->getValue(ownclConfig::F_COLLABORATION_APP_INTEGRATION)
                 && $this->getPluginObject()->isAllowOpenInOwncloud();
         }
 

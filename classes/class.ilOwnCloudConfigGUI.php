@@ -61,6 +61,11 @@ class ilOwnCloudConfigGUI extends ilCloudPluginConfigGUI
                         'required' => true,
                         'info'     => $this->plugin_object->txt("cfg_" . ownclConfig::F_COLLABORATION_APP_INTEGRATION . '_' . ownclConfig::F_COLLABORATION_APP_URL . '_info')
                     ),
+                    ownclConfig::F_COLLABORATION_APP_FORMATS => array(
+                        'type'     => self::IL_TEXTAREA_INPUT_GUI,
+                        'required' => true,
+                        'info'     => $this->plugin_object->txt("cfg_" . ownclConfig::F_COLLABORATION_APP_INTEGRATION . '_' . ownclConfig::F_COLLABORATION_APP_FORMATS . '_info')
+                    ),
                     ownclConfig::F_USER_MAPPING_FIELD    => array(
                         'type'     => self::IL_SELECT_INPUT_GUI,
                         'required' => true,
