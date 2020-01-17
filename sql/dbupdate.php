@@ -124,3 +124,11 @@ if (!$ilDB->tableColumnExists('cld_cldh_owncld_props', 'allow_open_in_owncloud')
 		);
 }
 ?>
+<#9>
+<?php
+$conf = new ownclConfig();
+$conf->setValue(
+		ownclConfig::F_COLLABORATION_APP_INTEGRATION . '_' . ownclConfig::F_COLLABORATION_APP_FORMATS,
+		'xls,xlsx,doc,docx,dot,dotx,odt,ott,rtf,txt,pdf,pdfa,html,epub,xps,djvu,djv'
+);
+?>

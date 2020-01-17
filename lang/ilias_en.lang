@@ -28,10 +28,13 @@ cfg_collaboration_app_integration#:#Collaboration App Integration
 cfg_collaboration_app_integration_info#:#Activates action "Edit in OwnCloud", which opens documents in a Collaboration App (e.g. OnlyOffice).
 cfg_collaboration_app_integration_url#:#Relative URL Collaboration App
 cfg_collaboration_app_integration_url_info#:#Placeholders &#123FILE_ID} and &#123FILE_PATH} can be used. Example OnlyOffice: index.php/apps/onlyoffice/&#123FILE_ID}?filePath=&#123FILE_PATH}
+cfg_collaboration_app_integration_formats#:#Supported Formats
+cfg_collaboration_app_integration_formats_info#:#Comma-separated list of format supported by the Collaboration App.
 cfg_collaboration_app_integration_mapping_field#:#User Field for Mapping
 cfg_collaboration_app_integration_mapping_field_info#:#Defines which user field contains the OwnCloud username (used for granting document permissions).
 info_token_expires#:#Access-Token expires
 root_folder#:#Root Folder
 not_authorized#:#Authentication failed. Please reload the page to get redirected to the authentification point.
-allow_open_in_owncloud#:#Activate "Edit in OwnCloud"
+allow_open_in_owncloud#:#Activate "Edit in OwnCloud" for files
+allow_open_in_owncloud_info#:#This action will only be offered to users with the permission "Upload".
 open_in_owncloud#:#Edit in OwnCloud

@@ -12,7 +12,10 @@ class ownclShareAPI
 {
 
     const URI_SHARE_API = 'ocs/v1.php/apps/files_sharing/api/v1/shares';
-    const FORMAT_PARAMETER = '?format=json';
+
+    const PARAM_FORMAT_JSON = 'format=json';
+    const PARAM_PATH = 'path=';
+
     const SHARE_TYPE_USER = 0;
     const SHARE_TYPE_GROUP = 1;
     const SHARE_TYPE_PUBLIC_LINK = 3;
@@ -24,6 +27,7 @@ class ownclShareAPI
     const PERM_TYPE_READ_WRITE = 15;
     const PERM_TYPE_SHARE = 16;
     const PERM_TYPE_ALL = 31;
+
     /**
      * @var Client
      */
@@ -48,35 +52,92 @@ class ownclShareAPI
 
 
     /**
-     * @return stdClass
+     * @return ownclShare[]
      * @throws GuzzleException
      */
-    public function all()
+    public function all() : array
     {
-        $response = $this->http_client->request('GET', self::URI_SHARE_API . self::FORMAT_PARAMETER, $this->getOptions());
+        $response = $this->http_client->request('GET', self::URI_SHARE_API . '?' . self::PARAM_FORMAT_JSON, $this->getOptions());
+        $decoded = json_decode($response->getBody()->getContents());
+        $shares = [];
+        if ($decoded->ocs->meta->status === 'ok') {
+            $shares = [];
+            foreach ($decoded->ocs->data as $std_class) {
+                $shares[] = ownclShare::loadFromStdClass($std_class);
+            }
+        }
+        return $shares;
+    }
 
-        return json_decode($response->getBody()->getContents());
+    /**
+     * @param string $path
+     *
+     * @return ownclShare[]
+     * @throws GuzzleException
+     */
+    public function getForPath(string $path) : array
+    {
+        $response = $this->http_client->request(
+            'GET',
+            self::URI_SHARE_API . '?' . self::PARAM_FORMAT_JSON . '&' . self::PARAM_PATH . $path,
+            $this->getOptions()
+        );
+        $decoded = json_decode($response->getBody()->getContents());
+        $shares = [];
+        if ($decoded->ocs->meta->status === 'ok') {
+            $shares = [];
+            foreach ($decoded->ocs->data as $std_class) {
+                $shares[] = ownclShare::loadFromStdClass($std_class);
+            }
+        }
+        return $shares;
     }
 
 
     /**
-     * @param $path
-     * @param $user
+     * @param string $path
+     * @param string $user
+     *
+     * @param int    $permissions
      *
      * @return mixed
      * @throws GuzzleException
      */
-    public function create($path, $user)
+    public function create(string $path, string $user, int $permissions)
     {
         $additional_options = [
             'form_params' => [
                 'path'        => $path,
                 'shareType'   => self::SHARE_TYPE_USER,
                 'shareWith'   => $user,
-                'permissions' => self::PERM_TYPE_READ_WRITE
+                'permissions' => $permissions
             ]
         ];
-        $response = $this->http_client->request('POST', self::URI_SHARE_API . self::FORMAT_PARAMETER, $this->getOptions($additional_options));
+        $response = $this->http_client->request('POST', self::URI_SHARE_API . '?' . self::PARAM_FORMAT_JSON, $this->getOptions($additional_options));
+
+        return json_decode($response->getBody()->getContents());
+    }
+
+
+    /**
+     * @param int $share_id
+     * @param int $permissions
+     *
+     * @return mixed
+     * @throws GuzzleException
+     */
+    public function update(int $share_id, int $permissions)
+    {
+        $additional_options = [
+            'form_params' => [
+                'permissions' => $permissions
+            ]
+        ];
+        $response = $this->http_client->request(
+            'PUT',
+            self::URI_SHARE_API . '/' . $share_id . '?' . self::PARAM_FORMAT_JSON,
+            $this->getOptions($additional_options)
+        );
 
         return json_decode($response->getBody()->getContents());
     }

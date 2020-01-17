@@ -298,6 +298,7 @@ class ComposerStaticInit0152201323dcfa5a9528401bd3b4ab7a
         'ownclLog' => __DIR__ . '/../..' . '/classes/class.ownclLog.php',
         'ownclOAuth2UserToken' => __DIR__ . '/../..' . '/classes/Auth/Token/class.ownclOAuth2UserToken.php',
         'ownclRESTClient' => __DIR__ . '/../..' . '/classes/Client/RESTClient/ownclRESTClient.php',
+        'ownclShare' => __DIR__ . '/../..' . '/classes/Client/Item/class.ownclShare.php',
         'ownclShareAPI' => __DIR__ . '/../..' . '/classes/Client/RESTClient/ownclShareAPI.php',
         'ownclTree' => __DIR__ . '/../..' . '/classes/class.ownclTree.php',
         'ownclTreeGUI' => __DIR__ . '/../..' . '/classes/class.ownclTreeGUI.php',

@@ -19,6 +19,7 @@ class ownclConfig extends ilCloudPluginConfig
     const F_OAUTH2_PATH = 'oauth2_path';
     const F_COLLABORATION_APP_INTEGRATION = 'collaboration_app_integration';
     const F_COLLABORATION_APP_URL = 'url';
+    const F_COLLABORATION_APP_FORMATS = 'formats';
     const F_USER_MAPPING_FIELD = 'mapping_field';
     const DEFAULT_WEBDAV_PATH = 'remote.php/webdav';
     const DEFAULT_OAUTH2_PATH = 'index.php/apps/oauth2';
@@ -195,6 +196,18 @@ class ownclConfig extends ilCloudPluginConfig
         }
     }
 
+
+    /**
+     * @return array
+     * @throws ilCloudPluginConfigException
+     */
+    public function getCollaborationAppFormats()
+    {
+        return array_map(
+            'trim',
+            explode(',', $this->getValue(self::F_COLLABORATION_APP_INTEGRATION . '_' . self::F_COLLABORATION_APP_FORMATS))
+        );
+    }
 
     /**
      * @param $key

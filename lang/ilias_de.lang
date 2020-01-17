@@ -27,11 +27,14 @@ cfg_default_info#:#Default: %s
 cfg_collaboration_app_integration#:#Collaboration-App-Integration
 cfg_collaboration_app_integration_info#:#Aktiviert die Aktion "Bearbeiten in OwnCloud", welche Dokumente direkt in einer Collaboration App (z.B. OnlyOffice) öffnet.
 cfg_collaboration_app_integration_url#:#Relative URL Collaboration-App
-cfg_collaboration_app_integration_url_info#:#Als Platzhalter können &#123FILE_ID} und &#123FILE_PATH} verwendet werden. Bsp. OnlyOffice: index.php/apps/onlyoffice/&#123FILE_ID}?filePath=&#123FILE_PATH}
+cfg_collaboration_app_integration_url_info#:#Als Platzhalter können &#123FILE_ID} und &#123FILE_PATH} verwendet werden. Bsp. OnlyOffice: index
+cfg_collaboration_app_integration_formats#:#Unterstützte Formate
+cfg_collaboration_app_integration_formats_info#:#Kommaseparierte Liste der Formate, welche in der App geöffnet werden können.
 cfg_collaboration_app_integration_mapping_field#:#Benutzerfeld für Mapping
 cfg_collaboration_app_integration_mapping_field_info#:#Bestimmt, in welchem Benutzerfeld der OwnCloud-Benutzername enthalten ist (wird verwendet, um Berechtigungen auf Dokumenten zu erteilen).
 info_token_expires#:#Access-Token läuft aus
 root_folder#:#Ordner
 not_authorized#:#Authentifizierung fehlgeschlagen. Bitte Laden Sie die Seite erneut, um an die Authentifizierungsstelle weitergeleitet zu werden.
-allow_open_in_owncloud#:#"Bearbeiten in OwnCloud" aktivieren
+allow_open_in_owncloud#:#"Bearbeiten in OwnCloud" für Dateien aktivieren
+allow_open_in_owncloud_info#:#Die Aktion wird nur für Benutzer mit dem Recht "Hochladen" angeboten.
 open_in_owncloud#:#Bearbeiten in OwnCloud
