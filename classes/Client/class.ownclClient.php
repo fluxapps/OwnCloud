@@ -344,7 +344,7 @@ class ownclClient
             foreach ($existing as $share) {
                 if ($share->getShareWith() === $user_string) {
                     if (!$share->hasPermission(ownclShareAPI::PERM_TYPE_UPDATE)) {
-                        $this->getRESTClient()->shareAPI($token)->update($share->getId(), $share->getPermissions() | ownclShareAPI::PERM_TYPE_UPDATE);
+                        $this->getRESTClient()->shareAPI($token)->update($share->getId(), $share->getPermissions() | (ownclShareAPI::PERM_TYPE_UPDATE + ownclShareAPI::PERM_TYPE_READ));
                     }
                     return;
                 }
