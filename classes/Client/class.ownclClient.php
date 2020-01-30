@@ -349,7 +349,7 @@ class ownclClient
                     return;
                 }
             }
-            $this->getRESTClient()->shareAPI($token)->create($path, $user_string, ownclShareAPI::PERM_TYPE_UPDATE);
+            $this->getRESTClient()->shareAPI($token)->create($path, $user_string, ownclShareAPI::PERM_TYPE_UPDATE + ownclShareAPI::PERM_TYPE_READ);
         }
     }
 }
