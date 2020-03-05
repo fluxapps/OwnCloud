@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.3.2]
+* improvement/feature: secondary email available for user mapping
+
 ## [2.3.1]
 * bugfix: grant write permissions when opening in Collaboration App (not only read)
 * bugfix: update permissions if share already exists

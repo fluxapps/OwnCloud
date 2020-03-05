@@ -193,6 +193,8 @@ class ownclConfig extends ilCloudPluginConfig
                 return $user->getExternalAccount();
             case 'email':
                 return $user->getEmail();
+            case 'second_email':
+                return $user->getSecondEmail();
         }
     }
 
