@@ -73,7 +73,8 @@ class ilOwnCloudConfigGUI extends ilCloudPluginConfigGUI
                         'options'  => array(
                             'login'       => $DIC->language()->txt('login'),
                             'ext_account' => $DIC->language()->txt('user_ext_account'),
-                            'email'       => $DIC->language()->txt('email')
+                            'email'       => $DIC->language()->txt('email'),
+                            'second_email'       => $DIC->language()->txt('second_email')
                         )
                     )
                 )
