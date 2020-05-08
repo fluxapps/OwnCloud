@@ -23,6 +23,8 @@ class ownclConfig extends ilCloudPluginConfig
     const F_USER_MAPPING_FIELD = 'mapping_field';
     const DEFAULT_WEBDAV_PATH = 'remote.php/webdav';
     const DEFAULT_OAUTH2_PATH = 'index.php/apps/oauth2';
+    const F_BASE_DIRECTORY = 'base_directory';
+
     /**
      * @var ilOwnCloudPlugin
      */
