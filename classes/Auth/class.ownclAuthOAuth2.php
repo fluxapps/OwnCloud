@@ -76,13 +76,20 @@ class ownclAuthOAuth2 implements ownclAuth
             return false;
         }
         if ($this->getToken()->isExpired()) {
+            $refresh_token = $this->getToken()->getRefreshToken();
             try {
                 $this->refreshToken();
-                ownclLog::getInstance()->write('Token successfully refreshed for user with id ' . $this->getToken()->getUserId());
+                ownclLog::getInstance()->write(
+                    'Token successfully refreshed for user with id ' . $this->getToken()->getUserId()
+                    . ' with refresh token ' . $refresh_token
+                );
 
                 return true;
             } catch (Exception $e) {
-                ownclLog::getInstance()->write('Exception: Token refresh for user with id ' . $this->getToken()->getUserId() . ' failed with message: ' . $e->getMessage());
+                ownclLog::getInstance()->write(
+                    'Exception: Token refresh for user with id ' . $this->getToken()->getUserId()
+                    . ' and refresh token ' . $refresh_token
+                    . ' failed with message: ' . $e->getMessage());
 
                 return false;
             }
