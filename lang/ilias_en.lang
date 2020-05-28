@@ -17,6 +17,8 @@ no_connection#:#Could not connect to the OwnCloud server. Please check the confi
 cfg_service_title#:#Service Title
 cfg_service_info#:#Service Info Text
 cfg_base_url#:#Base-URL
+cfg_base_directory#:#Base directory
+cfg_base_directory_info#:#This directory will be set as 'root folder' in newly created objects. This setting can be used to avoid including the entire OwnCloud in new objects. The root folder can still be changed later.
 cfg_server_url#:#Server-URL
 cfg_webdav_path#:#WebDAV-Path
 cfg_oauth2_active#:#OAuth2 authentification

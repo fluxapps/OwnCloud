@@ -126,9 +126,16 @@ if (!$ilDB->tableColumnExists('cld_cldh_owncld_props', 'allow_open_in_owncloud')
 ?>
 <#9>
 <?php
+require_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/OwnCloud/classes/class.ownclConfig.php");
 $conf = new ownclConfig();
 $conf->setValue(
 		ownclConfig::F_COLLABORATION_APP_INTEGRATION . '_' . ownclConfig::F_COLLABORATION_APP_FORMATS,
 		'xls,xlsx,doc,docx,dot,dotx,odt,ott,rtf,txt,pdf,pdfa,html,epub,xps,djvu,djv,ppt,pptx'
 );
+?>
+<#10>
+<?php
+require_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/OwnCloud/classes/class.ownclConfig.php");
+$conf = new ownclConfig();
+$conf->setValue(ownclConfig::F_BASE_DIRECTORY, '/ILIASshare');
 ?>

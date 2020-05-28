@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.4.0]
+* feature: choose base directory on creation (default configurable)
+
 ## [2.3.2]
 * improvement/feature: secondary email available for user mapping
 
