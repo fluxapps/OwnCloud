@@ -59,6 +59,11 @@ class ilOwnCloudService extends ilCloudPluginService
         global $ilCtrl;
         $ilCtrl->setCmd('edit');
 
+        $root_folder = $this->getPluginObject()->getCloudModulObject()->getRootFolder();
+        if (!$this->getClient()->folderExists($root_folder)) {
+            $this->createFolder($root_folder);
+        }
+
         return $this->getAuth()->afterAuthentication($this->getPluginObject());
     }
 
@@ -123,7 +128,7 @@ class ilOwnCloudService extends ilCloudPluginService
             $path = ilCloudUtil::joinPaths($file_tree->getRootPath(), $path);
         }
 
-        if ($path != '/') {
+        if ($path != '/' && !$this->getClient()->folderExists($path)) {
             $this->getClient()->createFolder($path);
         }
 

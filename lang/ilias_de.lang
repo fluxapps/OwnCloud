@@ -17,6 +17,8 @@ no_connection#:#Es konnte keine Verbindung zum OwnCloud Server hergestellt werde
 cfg_service_title#:#Service Titel
 cfg_service_info#:#Service Info Text
 cfg_base_url#:#Basis-URL
+cfg_base_directory#:#Basis-Verzeichnis
+cfg_base_directory_info#:#Dieses Verzeichnis wird bei neu erstellten Objekten als Basis-Ordner gewählt. Dies soll verhindern, dass bei neuen Objekten die gesamte OwnCloud eingebunden wird. Der Basis-Ordner kann später trotzdem angepasst werden.
 cfg_server_url#:#Server-URL
 cfg_webdav_path#:#WebDAV-Pfad
 cfg_oauth2_active#:#OAuth2-Authentifizierung
