@@ -195,6 +195,7 @@ class ownclClient
 
         $opts = array(
             'http' => array(
+                'protocol_version' => 1.1,
                 'method' => "GET",
                 'header' => "Authorization: " . $headers['Authorization']
             )
