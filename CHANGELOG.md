@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.4.1]
+* User HTTP/1.1 instead of HTTP/1.0
+
 ## [2.4.0]
 * feature: choose base directory on creation (default configurable)
 
