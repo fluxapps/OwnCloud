@@ -21,7 +21,12 @@ class ownclLog extends ilLog
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
-            self::$instance = new self(ILIAS_LOG_DIR, self::OC_LOG);
+            if (ILIAS_LOG_DIR === "php:/" && ILIAS_LOG_FILE === "stdout") {
+                // Fix Docker-ILIAS log
+                self::$instance = new self(ILIAS_LOG_DIR, ILIAS_LOG_FILE);
+            } else {
+                self::$instance = new self(ILIAS_LOG_DIR, self::OC_LOG);
+            }
         }
 
         return self::$instance;
@@ -48,7 +53,12 @@ class ownclLog extends ilLog
      */
     public function getLogFile()
     {
-        return self::OC_LOG;
+        if (ILIAS_LOG_DIR === "php:/" && ILIAS_LOG_FILE === "stdout") {
+            // Fix Docker-ILIAS log
+            return ILIAS_LOG_FILE;
+        } else {
+            return self::OC_LOG;
+        }
     }
 
 
