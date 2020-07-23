@@ -1,5 +1,8 @@
 # Changelog
 
+## [x]
+- Fix Docker-ILIAS log
+
 ## [2.4.1]
 * User HTTP/1.1 instead of HTTP/1.0
 
