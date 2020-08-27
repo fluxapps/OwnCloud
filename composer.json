@@ -33,13 +33,7 @@
       "srag\\Plugins\\OwnCloud\\": "src/"
     },
     "classmap": [
-      "classes/",
-      "../../../../../../../Modules/Cloud",
-      "../../../../../../../Services/Logging/classes/class.ilLog.php",
-      "../../../../../../../Services/UIComponent/Explorer2/classes/class.ilTreeExplorerGUI.php",
-      "../../../../../../../Services/ActiveRecord/class.ActiveRecord.php",
-      "../../../../../../../Services/Table/interfaces/interface.ilTableFilterItem.php",
-      "../../../../../../../Services/Form/classes"
+      "classes/"
     ]
   },
   "config": {
@@ -48,6 +42,9 @@
     "sort-packages": true
   },
   "scripts": {
-    "pre-autoload-dump": "srag\\LibrariesNamespaceChanger\\LibrariesNamespaceChanger::rewriteLibrariesNamespaces"
+    "pre-autoload-dump": [
+      "srag\\LibrariesNamespaceChanger\\LibrariesNamespaceChanger::rewriteLibrariesNamespaces",
+      "srag\\LibrariesNamespaceChanger\\PHP72Backport::PHP72Backport"
+    ]
   }
 }
