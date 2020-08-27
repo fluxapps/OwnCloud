@@ -1,6 +1,6 @@
 # Changelog
 
-## [x]
+## [2.5.0]
 - ILIAS 6 support
 - Fix Docker-ILIAS log
 
