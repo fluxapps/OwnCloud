@@ -1,5 +1,5 @@
 <?php
-
+use srag\DIC\OwnCloud\DICTrait;
 /**
  * Class ilOwnCloudSettingsGUI
  *
@@ -11,7 +11,7 @@
  */
 class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI
 {
-
+    use DICTrait;
     /**
      * @var ilPropertyFormGUI
      */
@@ -73,6 +73,10 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI
         }
 
         $this->getPluginObject()->getOwnCloudApp()->getOwnclAuth()->initPluginSettings($this->form);
+
+        if (self::version()->is6()) {
+            $this->initPresentationSection();
+        }
 
         $this->form->addCommandButton("updateSettings", $lng->txt("save"));
 
@@ -233,7 +237,11 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI
             }
             ilUtil::sendInfo($this->getPluginObject()->getPluginHookObject()->txt('choose_root'), true);
             $tpl->setContent($tree_gui->getHTML());
+            if (self::version()->is6()) {
+                $tpl->printToStdout();
+            } else {
             $tpl->show();
+            }
             exit;
         } else {
             $ilCtrl->setParameter($this, 'active_subtab', 'general');

@@ -5,25 +5,38 @@ namespace srag\DIC\OwnCloud\DIC;
 use Collator;
 use ilAccessHandler;
 use ilAppEventHandler;
+use ilAsqFactory;
 use ilAuthSession;
 use ilBenchmark;
+use ilBookingManagerService;
+use ilBookingReservationDBRepositoryFactory;
 use ilBrowser;
+use ilCertificateActiveValidator;
 use ilComponentLogger;
 use ilConditionService;
 use ilCtrl;
 use ilCtrlStructureReader;
 use ilDBInterface;
 use ilErrorHandling;
+use ilExerciseFactory;
+use ilFavouritesDBRepository;
 use ilGlobalTemplateInterface;
 use ilHelpGUI;
 use ILIAS;
 use ILIAS\DI\BackgroundTaskServices;
+use ILIAS\DI\Container;
 use ILIAS\DI\HTTPServices;
 use ILIAS\DI\LoggingServices;
+use ILIAS\DI\RBACServices;
 use ILIAS\DI\UIServices;
 use ILIAS\Filesystem\Filesystems;
 use ILIAS\FileUpload\FileUpload;
 use ILIAS\GlobalScreen\Services as GlobalScreenService;
+use ILIAS\Refinery\Factory as RefineryFactory;
+use ILIAS\UI\Implementation\Render\JavaScriptBinding;
+use ILIAS\UI\Implementation\Render\Loader;
+use ILIAS\UI\Implementation\Render\ResourceRegistry;
+use ILIAS\UI\Implementation\Render\TemplateFactory;
 use ilIniFile;
 use ilLanguage;
 use ilLearningHistoryService;
@@ -32,11 +45,13 @@ use ilLoggerFactory;
 use ilMailMimeSenderFactory;
 use ilMailMimeTransportFactory;
 use ilMainMenuGUI;
+use ilMMItemRepository;
 use ilNavigationHistory;
 use ilNewsService;
 use ilObjectDataCache;
 use ilObjectDefinition;
 use ilObjectService;
+use ilObjUseBookDBRepository;
 use ilObjUser;
 use ilPluginAdmin;
 use ilRbacAdmin;
@@ -45,6 +60,7 @@ use ilRbacSystem;
 use ilSetting;
 use ilStyleDefinition;
 use ilTabsGUI;
+use ilTaskService;
 use ilTemplate;
 use ilToolbarGUI;
 use ilTree;
@@ -60,339 +76,460 @@ use srag\DIC\OwnCloud\Exception\DICException;
  *
  * @author  studer + raimann ag - Team Custom 1 <support-custom1@studer-raimann.ch>
  */
-interface DICInterface {
+interface DICInterface
+{
 
-	/**
-	 * @return ilAccessHandler
-	 */
-	public function access(): ilAccessHandler;
+    /**
+     * DICInterface constructor
+     *
+     * @param Container $dic
+     */
+    public function __construct(Container &$dic);
 
 
-	/**
-	 * @return ilAppEventHandler
-	 */
-	public function appEventHandler(): ilAppEventHandler;
+    /**
+     * @return ilAccessHandler
+     */
+    public function access() : ilAccessHandler;
 
 
-	/**
-	 * @return ilAuthSession
-	 */
-	public function authSession(): ilAuthSession;
+    /**
+     * @return ilAppEventHandler
+     */
+    public function appEventHandler() : ilAppEventHandler;
 
 
-	/**
-	 * @return BackgroundTaskServices
-	 *
-	 * @since ILIAS 5.3
-	 */
-	public function backgroundTasks(): BackgroundTaskServices;
+    /**
+     * @return ilAuthSession
+     */
+    public function authSession() : ilAuthSession;
 
 
-	/**
-	 * @return ilBenchmark
-	 */
-	public function benchmark(): ilBenchmark;
+    /**
+     * @return BackgroundTaskServices
+     */
+    public function backgroundTasks() : BackgroundTaskServices;
 
 
-	/**
-	 * @return ilBrowser
-	 */
-	public function browser(): ilBrowser;
+    /**
+     * @return ilBenchmark
+     */
+    public function benchmark() : ilBenchmark;
 
 
-	/**
-	 * @return ilIniFile
-	 */
-	public function clientIni(): ilIniFile;
+    /**
+     * @return ilBookingManagerService
+     *
+     * @throws DICException ilBookingManagerService not exists in ILIAS 5.4 or below!
+     *
+     * @since ILIAS 6
+     */
+    public function bookingManager() : ilBookingManagerService;
 
 
-	/**
-	 * @return Collator
-	 */
-	public function collator(): Collator;
+    /**
+     * @return ilObjUseBookDBRepository
+     *
+     * @throws DICException ilObjUseBookDBRepository not exists in ILIAS 5.4 or below!
+     *
+     * @since ILIAS 6
+     */
+    public function bookingObjUseBook() : ilObjUseBookDBRepository;
 
 
-	/**
-	 * @return ilConditionService
-	 *
-	 * @throws DICException ilConditionService not exists in ILIAS 5.3 or below!
-	 *
-	 * @since ILIAS 5.4
-	 */
-	public function conditions(): ilConditionService;
+    /**
+     * @return ilBookingReservationDBRepositoryFactory
+     *
+     * @throws DICException ilBookingReservationDBRepositoryFactory not exists in ILIAS 5.4 or below!
+     *
+     * @since ILIAS 6
+     */
+    public function bookingReservation() : ilBookingReservationDBRepositoryFactory;
 
 
-	/**
-	 * @return ilCtrl
-	 */
-	public function ctrl(): ilCtrl;
+    /**
+     * @return ilBrowser
+     */
+    public function browser() : ilBrowser;
 
 
-	/**
-	 * @return ilCtrlStructureReader
-	 */
-	public function ctrlStructureReader(): ilCtrlStructureReader;
+    /**
+     * @return ilCertificateActiveValidator
+     */
+    public function certificateActiveValidator() : ilCertificateActiveValidator;
 
 
-	/**
-	 * @return DatabaseInterface
-	 *
-	 * @throws DICException DatabaseDetector only supports ilDBPdoInterface!
-	 */
-	public function database(): DatabaseInterface;
+    /**
+     * @return ilIniFile
+     */
+    public function clientIni() : ilIniFile;
 
 
-	/**
-	 * @return ilDBInterface
-	 */
-	public function databaseCore(): ilDBInterface;
+    /**
+     * @return Collator
+     */
+    public function collator() : Collator;
 
 
-	/**
-	 * @return ilErrorHandling
-	 */
-	public function error(): ilErrorHandling;
+    /**
+     * @return ilConditionService
+     */
+    public function conditions() : ilConditionService;
 
 
-	/**
-	 * @return Filesystems
-	 *
-	 * @since ILIAS 5.3
-	 */
-	public function filesystem(): Filesystems;
+    /**
+     * @return ilCtrl
+     */
+    public function ctrl() : ilCtrl;
 
 
-	/**
-	 * @return GlobalScreenService
-	 *
-	 * @throws DICException GlobalScreenService not exists in ILIAS 5.3 or below!
-	 *
-	 * @since ILIAS 5.4
-	 */
-	public function globalScreen(): GlobalScreenService;
+    /**
+     * @return ilCtrlStructureReader
+     */
+    public function ctrlStructureReader() : ilCtrlStructureReader;
 
 
-	/**
-	 * @return ilHelpGUI
-	 */
-	public function help(): ilHelpGUI;
+    /**
+     * @return DatabaseInterface
+     *
+     * @throws DICException DatabaseDetector only supports ilDBPdoInterface!
+     */
+    public function database() : DatabaseInterface;
 
 
-	/**
-	 * @return ilNavigationHistory
-	 */
-	public function history(): ilNavigationHistory;
+    /**
+     * @return ilDBInterface
+     */
+    public function databaseCore() : ilDBInterface;
 
 
-	/**
-	 * @return HTTPServices
-	 *
-	 * @since ILIAS 5.3
-	 */
-	public function http(): HTTPServices;
+    /**
+     * @return ilErrorHandling
+     */
+    public function error() : ilErrorHandling;
 
 
-	/**
-	 * @return ILIAS
-	 */
-	public function ilias(): ILIAS;
+    /**
+     * @return ilExerciseFactory
+     *
+     * @throws DICException ilExerciseFactory not exists in ILIAS 5.4 or below!
+     *
+     * @since ILIAS 6
+     */
+    public function exercise() : ilExerciseFactory;
 
 
-	/**
-	 * @return ilIniFile
-	 */
-	public function iliasIni(): ilIniFile;
+    /**
+     * @return ilFavouritesDBRepository
+     *
+     * @throws DICException ilExerciseFactory not exists in ILIAS 5.4 or below!
+     *
+     * @since ILIAS 6
+     */
+    public function favourites() : ilFavouritesDBRepository;
 
 
-	/**
-	 * @return ilLanguage
-	 */
-	public function language(): ilLanguage;
+    /**
+     * @return Filesystems
+     */
+    public function filesystem() : Filesystems;
 
 
-	/**
-	 * @return ilLearningHistoryService
-	 *
-	 * @throws DICException ilLearningHistoryService not exists in ILIAS 5.3 or below!
-	 *
-	 * @since ILIAS 5.4
-	 */
-	public function learningHistory(): ilLearningHistoryService;
+    /**
+     * @return GlobalScreenService
+     */
+    public function globalScreen() : GlobalScreenService;
 
 
-	/**
-	 * @return ilLocatorGUI
-	 */
-	public function locator(): ilLocatorGUI;
+    /**
+     * @return ilHelpGUI
+     */
+    public function help() : ilHelpGUI;
 
 
-	/**
-	 * @return ilComponentLogger
-	 */
-	public function log(): ilComponentLogger;
+    /**
+     * @return ilNavigationHistory
+     */
+    public function history() : ilNavigationHistory;
 
 
-	/**
-	 * @return LoggingServices
-	 *
-	 * @since ILIAS 5.2
-	 */
-	public function logger(): LoggingServices;
+    /**
+     * @return HTTPServices
+     */
+    public function http() : HTTPServices;
 
 
-	/**
-	 * @return ilLoggerFactory
-	 */
-	public function loggerFactory(): ilLoggerFactory;
+    /**
+     * @return ILIAS
+     */
+    public function ilias() : ILIAS;
 
 
-	/**
-	 * @return ilMailMimeSenderFactory
-	 *
-	 * @since ILIAS 5.3
-	 */
-	public function mailMimeSenderFactory(): ilMailMimeSenderFactory;
+    /**
+     * @return ilIniFile
+     */
+    public function iliasIni() : ilIniFile;
 
 
-	/**
-	 * @return ilMailMimeTransportFactory
-	 *
-	 * @since ILIAS 5.3
-	 */
-	public function mailMimeTransportFactory(): ilMailMimeTransportFactory;
+    /**
+     * @return JavaScriptBinding
+     */
+    public function javaScriptBinding() : JavaScriptBinding;
 
 
-	/**
-	 * @return ilMainMenuGUI
-	 */
-	public function mainMenu(): ilMainMenuGUI;
+    /**
+     * @return ilLanguage
+     */
+    public function language() : ilLanguage;
 
 
-	/**
-	 * @return ilTemplate|ilGlobalTemplateInterface
-	 */
-	public function mainTemplate();/*: ilGlobalTemplateInterface*/
+    /**
+     * @return ilLearningHistoryService
+     */
+    public function learningHistory() : ilLearningHistoryService;
 
-	/**
-	 * @return ilNewsService
-	 *
-	 * @throws DICException ilNewsService not exists in ILIAS 5.3 or below!
-	 *
-	 * @since ILIAS 5.4
-	 */
-	public function news(): ilNewsService;
 
+    /**
+     * @return ilLocatorGUI
+     */
+    public function locator() : ilLocatorGUI;
 
-	/**
-	 * @return ilObjectDataCache
-	 */
-	public function objDataCache(): ilObjectDataCache;
 
+    /**
+     * @return ilComponentLogger
+     */
+    public function log() : ilComponentLogger;
 
-	/**
-	 * @return ilObjectDefinition
-	 */
-	public function objDefinition(): ilObjectDefinition;
 
+    /**
+     * @return LoggingServices
+     *
+     * @since ILIAS 5.2
+     */
+    public function logger() : LoggingServices;
 
-	/**
-	 * @return ilObjectService
-	 *
-	 * @throws DICException ilObjectService not exists in ILIAS 5.3 or below!
-	 *
-	 * @since ILIAS 5.4
-	 */
-	public function object(): ilObjectService;
 
+    /**
+     * @return ilLoggerFactory
+     */
+    public function loggerFactory() : ilLoggerFactory;
 
-	/**
-	 * @return ilPluginAdmin
-	 */
-	public function pluginAdmin(): ilPluginAdmin;
 
+    /**
+     * @return ilMailMimeSenderFactory
+     */
+    public function mailMimeSenderFactory() : ilMailMimeSenderFactory;
 
-	/**
-	 * @return ilRbacAdmin
-	 */
-	public function rbacadmin(): ilRbacAdmin;
 
+    /**
+     * @return ilMailMimeTransportFactory
+     */
+    public function mailMimeTransportFactory() : ilMailMimeTransportFactory;
 
-	/**
-	 * @return ilRbacReview
-	 */
-	public function rbacreview(): ilRbacReview;
 
+    /**
+     * @return ilMainMenuGUI
+     */
+    public function mainMenu() : ilMainMenuGUI;
 
-	/**
-	 * @return ilRbacSystem
-	 */
-	public function rbacsystem(): ilRbacSystem;
 
+    /**
+     * @return ilMMItemRepository
+     */
+    public function mainMenuItem() : ilMMItemRepository;
 
-	/**
-	 * @return Session
-	 */
-	public function session(): Session;
 
+    /**
+     * @return ilTemplate|ilGlobalTemplateInterface
+     *
+     * @deprecated Please use `self::dic()->ui()->mainTemplate()`
+     */
+    public function mainTemplate();/*: ilGlobalTemplateInterface*/
 
-	/**
-	 * @return ilSetting
-	 */
-	public function settings(): ilSetting;
+    /**
+     * @return ilNewsService
+     */
+    public function news() : ilNewsService;
 
 
-	/**
-	 * @return ilStyleDefinition
-	 */
-	public function systemStyle(): ilStyleDefinition;
+    /**
+     * @return ilObjectDataCache
+     */
+    public function objDataCache() : ilObjectDataCache;
 
 
-	/**
-	 * @return ilTabsGUI
-	 */
-	public function tabs(): ilTabsGUI;
+    /**
+     * @return ilObjectDefinition
+     */
+    public function objDefinition() : ilObjectDefinition;
 
 
-	/**
-	 * @return ilToolbarGUI
-	 */
-	public function toolbar(): ilToolbarGUI;
+    /**
+     * @return ilObjectService
+     */
+    public function object() : ilObjectService;
 
 
-	/**
-	 * @return ilTree
-	 */
-	public function tree(): ilTree;
+    /**
+     * @return ilAsqFactory
+     *
+     * @throws DICException ilAsqFactory not exists in ILIAS 5.4 or below!
+     *
+     * @since ILIAS 6
+     */
+    public function question() : ilAsqFactory;
 
 
-	/**
-	 * @return UIServices
-	 *
-	 * @since ILIAS 5.2
-	 */
-	public function ui(): UIServices;
+    /**
+     * @return ilPluginAdmin
+     */
+    public function pluginAdmin() : ilPluginAdmin;
 
 
-	/**
-	 * @return ilUIService
-	 *
-	 * @since ILIAS 6.0
-	 *
-	 * @throws DICException ilUIService not exists in ILIAS 5.4 or below!
-	 */
-	public function uiService(): ilUIService;
+    /**
+     * @return RBACServices
+     */
+    public function rbac() : RBACServices;
 
 
-	/**
-	 * @return FileUpload
-	 *
-	 * @since ILIAS 5.3
-	 */
-	public function upload(): FileUpload;
+    /**
+     * @return ilRbacAdmin
+     *
+     * @deprecated Please use `self::dic()->rba()->admin()`
+     */
+    public function rbacadmin() : ilRbacAdmin;
 
 
-	/**
-	 * @return ilObjUser
-	 */
-	public function user(): ilObjUser;
+    /**
+     * @return ilRbacReview
+     *
+     * @deprecated Please use `self::dic()->rba()->review()`
+     */
+    public function rbacreview() : ilRbacReview;
+
+
+    /**
+     * @return ilRbacSystem
+     *
+     * @deprecated Please use `self::dic()->rba()->system()`
+     */
+    public function rbacsystem() : ilRbacSystem;
+
+
+    /**
+     * @return RefineryFactory
+     *
+     * @throws DICException RefineryFactory not exists in ILIAS 5.4 or below!
+     *
+     * @since ILIAS 6
+     */
+    public function refinery() : RefineryFactory;
+
+
+    /**
+     * @return Loader
+     */
+    public function rendererLoader() : Loader;
+
+
+    /**
+     * @return ilTree
+     */
+    public function repositoryTree() : ilTree;
+
+
+    /**
+     * @return ResourceRegistry
+     */
+    public function resourceRegistry() : ResourceRegistry;
+
+
+    /**
+     * @return Session
+     */
+    public function session() : Session;
+
+
+    /**
+     * @return ilSetting
+     */
+    public function settings() : ilSetting;
+
+
+    /**
+     * @return ilStyleDefinition
+     */
+    public function systemStyle() : ilStyleDefinition;
+
+
+    /**
+     * @return ilTabsGUI
+     */
+    public function tabs() : ilTabsGUI;
+
+
+    /**
+     * @return ilTaskService
+     *
+     * @throws DICException ilTaskService not exists in ILIAS 5.4 or below!
+     *
+     * @since ILIAS 6
+     */
+    public function task() : ilTaskService;
+
+
+    /**
+     * @return TemplateFactory
+     */
+    public function templateFactory() : TemplateFactory;
+
+
+    /**
+     * @return ilToolbarGUI
+     */
+    public function toolbar() : ilToolbarGUI;
+
+
+    /**
+     * @return ilTree
+     *
+     * @deprecated Please use `self::dic()->repositoryTree()`
+     */
+    public function tree() : ilTree;
+
+
+    /**
+     * @return UIServices
+     *
+     * @since ILIAS 5.2
+     */
+    public function ui() : UIServices;
+
+
+    /**
+     * @return ilUIService
+     *
+     * @throws DICException ilUIService not exists in ILIAS 5.4 or below!
+     *
+     * @since ILIAS 6
+     */
+    public function uiService() : ilUIService;
+
+
+    /**
+     * @return FileUpload
+     */
+    public function upload() : FileUpload;
+
+
+    /**
+     * @return ilObjUser
+     */
+    public function user() : ilObjUser;
+
+
+    /**
+     * @return Container
+     */
+    public function &dic() : Container;
 }
