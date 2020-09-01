@@ -137,6 +137,19 @@ class ilOwnCloudService extends ilCloudPluginService
 
 
     /**
+     * @inheritDoc
+     */
+    public function createFolderById(/*string*/ $id, /*string*/ $folder_name) : string
+    {
+        $path = $this->idToPath($id, $folder_name);
+
+        $this->createFolder($path);
+
+        return $this->pathToId($path);
+    }
+
+
+    /**
      * @param null            $path
      * @param ilCloudFileTree $file_tree
      *
@@ -165,5 +178,42 @@ class ilOwnCloudService extends ilCloudPluginService
     public function getPluginHookObject()
     {
         return parent::getPluginHookObject();
+    }
+
+
+    /**
+     * @param string      $id
+     * @param string|null $folder_name
+     *
+     * @return string
+     */
+    protected function idToPath(string $id, /*?*/ string $folder_name = null) : string
+    {
+        $path = ilCloudFileTree::getFileTreeFromSession()->getNodeFromId($id)->getPath();
+
+        if (!empty($folder_name)) {
+            $path = ilCloudUtil::joinPaths($path, $folder_name);
+        }
+
+        return $path;
+    }
+
+
+    /**
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function pathToId(string $path) : string
+    {
+        $node = ilCloudFileTree::getFileTreeFromSession()->getNodeFromPath($path);
+
+        if ($node === null) {
+            $id = $this->getClient()->pathToId($path);
+
+            $node = ilCloudFileTree::getFileTreeFromSession()->addNode($path, $id, true);
+        }
+
+        return $node->getId();
     }
 }
