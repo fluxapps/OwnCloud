@@ -102,7 +102,8 @@ class RequestException extends TransferException implements RequestExceptionInte
             $response->getReasonPhrase()
         );
 
-        $summary = \GuzzleHttp\Psr7\get_message_body_summary($response);
+        //$summary = \GuzzleHttp\Psr7\get_message_body_summary($response);
+        $summary = null;
 
         if ($summary !== null) {
             $message .= ":\n{$summary}\n";

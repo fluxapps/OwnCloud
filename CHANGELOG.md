@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.6.0]
+- Create folder
+- Fix 3 party library conflict multiple autoload
+
 ## [2.5.0]
 - ILIAS 6 support
 - Fix Docker-ILIAS log

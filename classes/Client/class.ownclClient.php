@@ -293,7 +293,7 @@ class ownclClient
     protected function itemExists($path)
     {
         try {
-            $request = $this->getWebDAVClient()->request('GET', $this->urlencode($path), null, $this->getAuth()->getHeaders());
+            $request = $this->getWebDAVClient()->request('GET', ltrim($this->urlencode($path), '/'), null, $this->getAuth()->getHeaders());
         } catch (Exception $e) {
             return false;
         }
@@ -352,5 +352,31 @@ class ownclClient
             }
             $this->getRESTClient()->shareAPI($token)->create($path, $user_string, ownclShareAPI::PERM_TYPE_UPDATE + ownclShareAPI::PERM_TYPE_READ);
         }
+    }
+
+
+    /**
+     * @param string $path
+     *
+     * @return string
+     */
+    public function pathToId(string $path) : string
+    {
+        $settings = $this->getAuth()->getClientSettings();
+
+        $client = $this->getWebDAVClient();
+
+        $response = $client->propFind(
+            $settings['baseUri'] . $path,
+            [
+                '{http://owncloud.org/ns}fileid'
+            ],
+            0,
+            $this->getAuth()->getHeaders()
+        );
+
+        $id = strval(current($response));
+
+        return $id;
     }
 }
