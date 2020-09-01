@@ -1,6 +1,6 @@
 # Changelog
 
-## [x]
+## [2.6.0]
 - Create folder
 - Fix 3 party library conflict multiple autoload
 
