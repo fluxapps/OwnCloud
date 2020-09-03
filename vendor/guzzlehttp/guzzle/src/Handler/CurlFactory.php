@@ -17,8 +17,8 @@ use Psr\Http\Message\RequestInterface;
  */
 class CurlFactory implements CurlFactoryInterface
 {
-    public const CURL_VERSION_STR = 'curl_version';
-    public const LOW_CURL_VERSION_NUMBER = '7.21.2';
+    const CURL_VERSION_STR = 'curl_version';
+    const LOW_CURL_VERSION_NUMBER = '7.21.2';
 
     /**
      * @var resource[]
@@ -472,9 +472,9 @@ class CurlFactory implements CurlFactoryInterface
         if (isset($options['ssl_key'])) {
             if (\is_array($options['ssl_key'])) {
                 if (\count($options['ssl_key']) === 2) {
-                    [$sslKey, $conf[\CURLOPT_SSLKEYPASSWD]] = $options['ssl_key'];
+                    list($sslKey, $conf[\CURLOPT_SSLKEYPASSWD]) = $options['ssl_key'];
                 } else {
-                    [$sslKey] = $options['ssl_key'];
+                   list($sslKey) = $options['ssl_key'];
                 }
             }
 

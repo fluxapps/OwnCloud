@@ -22,7 +22,7 @@ function describe_type($input): string
  * @param iterable $lines Header lines array of strings in the following
  *                        format: "Name: Value"
  */
-function headers_from_lines(iterable $lines): array
+function headers_from_lines(/*iterable*/ $lines): array
 {
     return Utils::headersFromLines($lines);
 }

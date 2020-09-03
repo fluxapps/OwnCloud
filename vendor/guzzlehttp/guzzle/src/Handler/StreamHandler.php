@@ -111,7 +111,7 @@ class StreamHandler
         $status = (int) $parts[1];
         $reason = $parts[2] ?? null;
         $headers = Utils::headersFromLines($hdrs);
-        [$stream, $headers] = $this->checkDecode($options, $headers, $stream);
+        list($stream, $headers) = $this->checkDecode($options, $headers, $stream);
         $stream = Psr7\stream_for($stream);
         $sink = $stream;
 
@@ -539,7 +539,7 @@ class StreamHandler
         $ident = $request->getMethod() . ' ' . $request->getUri()->withFragment('');
         $this->addNotification(
             $params,
-            static function () use ($ident, $value, $map, $args): void {
+            static function () use ($ident, $value, $map, $args)/*: void*/ {
                 $passed = \func_get_args();
                 $code = \array_shift($passed);
                 \fprintf($value, '<%s> [%s] ', $ident, $map[$code]);
