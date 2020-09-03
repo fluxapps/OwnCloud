@@ -43,7 +43,7 @@ final class Utils
      * @param iterable $lines Header lines array of strings in the following
      *                        format: "Name: Value"
      */
-    public static function headersFromLines(iterable $lines): array
+    public static function headersFromLines(/*iterable*/ $lines): array
     {
         $headers = [];
 
@@ -381,7 +381,7 @@ EOT
     /**
      * @return string|false
      */
-    private static function idnToAsci(string $domain, int $options, ?array &$info = [])
+    private static function idnToAsci(string $domain, int $options, /*?array*/ &$info = [])
     {
         if (\function_exists('idn_to_ascii') && \defined('INTL_IDNA_VARIANT_UTS46')) {
             return \idn_to_ascii($domain, $options, \INTL_IDNA_VARIANT_UTS46, $info);

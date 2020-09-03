@@ -151,7 +151,7 @@ class MockHandler implements \Countable
      *
      * @param mixed ...$values
      */
-    public function append(...$values): void
+    public function append(...$values)/*: void*/
     {
         foreach ($values as $value) {
             if ($value instanceof ResponseInterface

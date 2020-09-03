@@ -17,9 +17,9 @@ use Psr\Http\Message\UriInterface;
  */
 class RedirectMiddleware
 {
-    public const HISTORY_HEADER = 'X-Guzzle-Redirect-History';
+    const HISTORY_HEADER = 'X-Guzzle-Redirect-History';
 
-    public const STATUS_HISTORY_HEADER = 'X-Guzzle-Redirect-Status-History';
+    const STATUS_HISTORY_HEADER = 'X-Guzzle-Redirect-Status-History';
 
     /**
      * @var array

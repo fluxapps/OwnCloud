@@ -141,7 +141,7 @@ class HandlerStack
      * @param callable(callable): callable $middleware Middleware function
      * @param string                       $name       Name to register for this middleware.
      */
-    public function push(callable $middleware, string $name = ''): void
+    public function push(callable $middleware, string $name = '')/*: void*/
     {
         $this->stack[] = [$middleware, $name];
         $this->cached = null;
@@ -154,7 +154,7 @@ class HandlerStack
      * @param callable(callable): callable $middleware Middleware function
      * @param string                       $withName   Name to register for this middleware.
      */
-    public function before(string $findName, callable $middleware, string $withName = ''): void
+    public function before(string $findName, callable $middleware, string $withName = '')/*: void*/
     {
         $this->splice($findName, $withName, $middleware, true);
     }
@@ -166,7 +166,7 @@ class HandlerStack
      * @param callable(callable): callable $middleware Middleware function
      * @param string                       $withName   Name to register for this middleware.
      */
-    public function after(string $findName, callable $middleware, string $withName = ''): void
+    public function after(string $findName, callable $middleware, string $withName = '')/*: void*/
     {
         $this->splice($findName, $withName, $middleware, false);
     }
