@@ -338,6 +338,10 @@ class ownclClient
      */
     public function shareItem($path, $user)
     {
+        if ($user->getId() == $this->getOwnCloudApp()->getIlOwnCloud()->getOwnerId()) {
+            // no need to share with yourself (can result in an error with nextcloud)
+            return;
+        }
         $token = ownclOAuth2UserToken::getUserToken($this->getOwnCloudApp()->getIlOwnCloud()->getOwnerId());
         if ($token) {
             $user_string = $this->config->getMappingValueForUser($user);
