@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.6.2]
+- Fix "Not Authenticated - Offline" bug (race condition on token refresh)
+
 ## [2.6.1]
 - Fix PHP 7.0
 

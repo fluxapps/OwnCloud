@@ -1,6 +1,8 @@
 <?php
 /* Copyright (c) 1998-2009 ILIAS open source, Extended GPL, see docs/LICENSE */
 
+use ILIAS\DI\Container;
+
 /**
  * Class ownclAuthOAuth2
  *
@@ -27,6 +29,10 @@ class ownclAuthOAuth2 implements ownclAuth
      * @var ownclOAuth2UserToken
      */
     protected $user_token;
+    /**
+     * @var Container
+     */
+    protected $dic;
 
 
     /**
@@ -36,6 +42,8 @@ class ownclAuthOAuth2 implements ownclAuth
      */
     public function __construct(ownclApp $app)
     {
+        global $DIC;
+        $this->dic = $DIC;
         $this->setApp($app);
         $this->config = new ownclConfig();
         $this->oauth2_provider = new OAuth2Provider(array(
@@ -72,29 +80,37 @@ class ownclAuthOAuth2 implements ownclAuth
     {
         if (!$this->getToken()->getAccessToken() && !$this->getToken()->getRefreshToken()) {
             ownclLog::getInstance()->write('No access or refresh token found for user with id ' . $this->getToken()->getUserId());
-
             return false;
         }
+
         if ($this->getToken()->isExpired()) {
-            $refresh_token = $this->getToken()->getRefreshToken();
-            try {
-                $this->refreshToken();
-                ownclLog::getInstance()->write(
-                    'Token successfully refreshed for user with id ' . $this->getToken()->getUserId()
-                    . ' with refresh token ' . $refresh_token
-                );
+            $atom_query = $this->dic->database()->buildAtomQuery();
+            $atom_query->addTableLock(ownclOAuth2UserToken::DB_TABLE_NAME);
+            $atom_query->addQueryCallable(function (ilDBInterface $ilDB) {
+                $this->loadToken(); // reload token and check again inside table lock to prevent race condition
+                if (!$this->getToken()->isExpired()) {
+                    return true;
+                }
+                $refresh_token = $this->getToken()->getRefreshToken();
+                try {
+                    $this->refreshToken();
+                    ownclLog::getInstance()->write(
+                        'Token successfully refreshed for user with id ' . $this->getToken()->getUserId()
+                        . ' with refresh token ' . $refresh_token
+                    );
 
-                return true;
-            } catch (Exception $e) {
-                ownclLog::getInstance()->write(
-                    'Exception: Token refresh for user with id ' . $this->getToken()->getUserId()
-                    . ' and refresh token ' . $refresh_token
-                    . ' failed with message: ' . $e->getMessage());
+                    return true;
+                } catch (Exception $e) {
+                    ownclLog::getInstance()->write(
+                        'Exception: Token refresh for user with id ' . $this->getToken()->getUserId()
+                        . ' and refresh token ' . $refresh_token
+                        . ' failed with message: ' . $e->getMessage());
 
-                return false;
-            }
+                    return false;
+                }
+            });
+            $atom_query->run();
         }
-
         return true;
     }
 
@@ -211,15 +227,19 @@ class ownclAuthOAuth2 implements ownclAuth
     public function getToken()
     {
         if (!$this->user_token) {
-            global $ilUser;
-            $ilOwnCloud = $this->getApp()->getIlOwnCloud();
-            // at object creation, the object and owner id does not yet exist, therefore we take the current user's id
-            $this->user_token = ownclOAuth2UserToken::getUserToken($ilOwnCloud ? $ilOwnCloud->getOwnerId() : $ilUser->getId());
+            $this->loadToken();
         }
 
         return $this->user_token;
     }
 
+    public function loadToken()
+    {
+        global $ilUser;
+        $ilOwnCloud = $this->getApp()->getIlOwnCloud();
+        // at object creation, the object and owner id does not yet exist, therefore we take the current user's id
+        $this->user_token = ownclOAuth2UserToken::getUserToken($ilOwnCloud ? $ilOwnCloud->getOwnerId() : $ilUser->getId());
+    }
 
     /**
      * @return ownclApp

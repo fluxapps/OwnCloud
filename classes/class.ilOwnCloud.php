@@ -1,5 +1,7 @@
 <?php
 
+use ILIAS\DI\Container;
+
 /**
  * Class ilOwnCloud
  *
@@ -21,9 +23,9 @@ class ilOwnCloud extends ilCloudPlugin
      */
     protected $password;
     /**
-     * @var ilObjUser
+     * @var Container
      */
-    protected $user;
+    protected $dic;
     /**
      * @var bool
      */
@@ -39,8 +41,8 @@ class ilOwnCloud extends ilCloudPlugin
      */
     public function __construct($service_name, $obj_id, $cloud_modul_object = null)
     {
-        global $ilUser;
-        $this->user = $ilUser;
+        global $DIC;
+        $this->dic = $DIC;
         parent::__construct('OwnCloud', $obj_id, $cloud_modul_object);
     }
 
@@ -138,7 +140,7 @@ class ilOwnCloud extends ilCloudPlugin
         if ($status == 401 && $this->getCloudModulObject()->getAuthComplete()) {
             $this->getCloudModulObject()->setAuthComplete(false);
             $this->getCloudModulObject()->doUpdate();
-            if ($this->user->getId() != $this->getCloudModulObject()->getOwnerId()) {
+            if ($this->dic->user()->getId() != $this->getCloudModulObject()->getOwnerId()) {
                 throw new ilCloudException(ilCloudException::AUTHENTICATION_FAILED, 'Der Ordner kann zur Zeit nur vom Besitzer geöffnet werden.');
             } else {
                 throw new ilCloudException(ilCloudException::AUTHENTICATION_FAILED, $this->getPluginHookObject()->txt('not_authorized'));
