@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.6.3]
+- Fix 401 error when opening document in collaboration app
+
 ## [2.6.2]
 - Fix "Not Authenticated - Offline" bug (race condition on token refresh)
 
