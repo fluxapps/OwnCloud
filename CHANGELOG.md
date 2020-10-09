@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.6.4]
+- Fix Table Lock Fatal Error
+
 ## [2.6.3]
 - Fix 401 error when opening document in collaboration app
 

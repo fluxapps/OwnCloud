@@ -176,6 +176,13 @@ class ilOwnCloud extends ilCloudPlugin
         return $ids;
     }
 
+    /**
+     * @return int
+     */
+    public function getOwnerId()
+    {
+        return $this->getCloudModulObject()->getOwnerId();
+    }
 
     /**
      * @param String $password
