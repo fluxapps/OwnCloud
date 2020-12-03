@@ -342,20 +342,18 @@ class ownclClient
             // no need to share with yourself (can result in an error with nextcloud)
             return;
         }
-        $token = ownclOAuth2UserToken::getUserToken($this->getOwnCloudApp()->getIlOwnCloud()->getOwnerId());
-        if ($token) {
-            $user_string = $this->config->getMappingValueForUser($user);
-            $existing = $this->getRESTClient()->shareAPI($token)->getForPath($path);
-            foreach ($existing as $share) {
-                if ($share->getShareWith() === $user_string) {
-                    if (!$share->hasPermission(ownclShareAPI::PERM_TYPE_UPDATE)) {
-                        $this->getRESTClient()->shareAPI($token)->update($share->getId(), $share->getPermissions() | (ownclShareAPI::PERM_TYPE_UPDATE + ownclShareAPI::PERM_TYPE_READ));
-                    }
-                    return;
+        $user_string = $this->config->getMappingValueForUser($user);
+        $shareAPI = $this->getRESTClient()->shareAPI($this->getAuth());
+        $existing = $shareAPI->getForPath($path);
+        foreach ($existing as $share) {
+            if ($share->getShareWith() === $user_string) {
+                if (!$share->hasPermission(ownclShareAPI::PERM_TYPE_UPDATE)) {
+                    $shareAPI->update($share->getId(), $share->getPermissions() | (ownclShareAPI::PERM_TYPE_UPDATE + ownclShareAPI::PERM_TYPE_READ));
                 }
+                return;
             }
-            $this->getRESTClient()->shareAPI($token)->create($path, $user_string, ownclShareAPI::PERM_TYPE_UPDATE + ownclShareAPI::PERM_TYPE_READ);
         }
+        $shareAPI->create($path, $user_string, ownclShareAPI::PERM_TYPE_UPDATE + ownclShareAPI::PERM_TYPE_READ);
     }
 
 

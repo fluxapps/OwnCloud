@@ -39,13 +39,12 @@ class ownclRESTClient
 
 
     /**
-     * @param ownclOAuth2UserToken $token
-     *
+     * @param ownclAuth $ownclAuth
      * @return ownclShareAPI
      */
-    public function shareAPI($token)
+    public function shareAPI($ownclAuth)
     {
-        return new ownclShareAPI($this->http_client, $token);
+        return new ownclShareAPI($this->http_client, $ownclAuth);
     }
 
 
