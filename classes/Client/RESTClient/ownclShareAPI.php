@@ -33,21 +33,19 @@ class ownclShareAPI
      */
     protected $http_client;
     /**
-     * @var ownclOAuth2UserToken
+     * @var ownclAuth
      */
-    protected $token;
-
+    protected $auth;
 
     /**
      * ownclShareAPI constructor.
-     *
-     * @param Client               $http_client
-     * @param ownclOAuth2UserToken $token
+     * @param Client    $http_client
+     * @param ownclAuth $auth
      */
-    public function __construct(Client $http_client, ownclOAuth2UserToken $token)
+    public function __construct(Client $http_client, ownclAuth $auth)
     {
         $this->http_client = $http_client;
-        $this->token = $token;
+        $this->auth = $auth;
     }
 
 
@@ -151,7 +149,7 @@ class ownclShareAPI
     protected function getOptions($additional_options = [])
     {
         return array_merge([
-            'headers' => ['Authorization' => 'Bearer ' . $this->token->getAccessToken()]
+            'headers' => $this->auth->getHeaders()
         ], $additional_options);
     }
 }
