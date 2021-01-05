@@ -37,3 +37,4 @@ not_authorized#:#Authentifizierung fehlgeschlagen. Bitte Laden Sie die Seite ern
 allow_open_in_owncloud#:#"Bearbeiten in OwnCloud" für Dateien aktivieren
 allow_open_in_owncloud_info#:#Die Aktion wird nur für Benutzer mit dem Recht "Hochladen" angeboten.
 open_in_owncloud#:#Bearbeiten in OwnCloud
+owncloud_specific_settings#:#OwnCloud-spezifische Einstellungen

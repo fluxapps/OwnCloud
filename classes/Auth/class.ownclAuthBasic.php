@@ -74,9 +74,8 @@ class ownclAuthBasic implements ownclAuth
 
     public function initPluginSettings(&$form)
     {
-        global $lng;
         $section = new ilFormSectionHeaderGUI();
-        $section->setTitle($this->getApp()->getIlOwnCloud()->getCloudModulObject()->getServiceName() . " " . $lng->txt("cld_service_specific_settings"));
+        $section->setTitle(ilOwnCloudPlugin::getInstance()->txt('owncloud_specific_settings'));
         $form->addItem($section);
 
         $item = new ilTextInputGUI(ilOwnCloudPlugin::getInstance()->txt('username'), 'username');
