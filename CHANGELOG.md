@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.7.1]
+- improvement: added info text to 'base directory' input
+
 ## [2.7.0]
 - Feature: Share API (for 'edit in collaboration app') compatibility with basic auth
 
