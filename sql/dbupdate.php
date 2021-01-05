@@ -27,8 +27,10 @@ $fields = array(
     ),
 );
 global $ilDB;
-$ilDB->createTable($pl->getPluginTableName(), $fields);
-$ilDB->addPrimaryKey($pl->getPluginTableName(), array( "id" ));
+if (!$ilDB->tableExists($pl->getPluginTableName())) {
+    $ilDB->createTable($pl->getPluginTableName(), $fields);
+    $ilDB->addPrimaryKey($pl->getPluginTableName(), array( "id" ));
+}
 ?>
 <#2>
 <?php
