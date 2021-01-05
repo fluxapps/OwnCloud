@@ -6,11 +6,8 @@ username#:#Benutzername
 password#:#Passwort
 proxy#:#Proxy
 configuration#:#Einstellungen
-add_new_base_folder#:#Basis-Ordner
-add_new_custom_base_folder#:#Eigener Ordner
-add_new_custom_base_folder_input#:#Ordnername
-add_new_custom_base_folder_input_info#:#Mit führendem /
-add_new_default_base_folder#:#Hauptverzeichnis
+creation_frm_base_directory#:#Basis-Ordner
+creation_frm_base_directory_info#:#Mit führendem /
 choose_root#:#Bitte wählen Sie unten den gewünschten zu verlinkenden Ordner aus. <br>Hinweis: Bei vielen Dateien kann das Darstellen der Ordnerinhalte einige Zeit in Anspruch nehmen. Der Pfad des gewünschten Ordners kann auch manuell in den Einstellungen eingegeben werden.
 link_choose_root#:#Ordner auswählen
 no_connection#:#Es konnte keine Verbindung zum OwnCloud Server hergestellt werden. Bitte überprüfen Sie Einstellungen und kontaktieren Sie allenfalls den Systemadministrator.
