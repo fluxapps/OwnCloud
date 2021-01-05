@@ -1,7 +1,7 @@
 # Changelog
 
 ## [2.7.0]
-- Feature: Share API (for 'edit in collaboration app') compatability with basic auth
+- Feature: Share API (for 'edit in collaboration app') compatibility with basic auth
 
 ## [2.6.4]
 - Fix Table Lock Fatal Error
