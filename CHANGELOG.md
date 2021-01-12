@@ -4,6 +4,7 @@
 - improvement: added info text to 'base directory' input
 - Fix: fixed tree picker ('Choose folder')
 - Fix: prevent fatal on reinstall
+- Fix: prevent 400 error on creating folders
 
 ## [2.7.0]
 - Feature: Share API (for 'edit in collaboration app') compatability with basic auth
