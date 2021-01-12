@@ -369,7 +369,7 @@ class ownclClient
         $client = $this->getWebDAVClient();
 
         $response = $client->propFind(
-            $settings['baseUri'] . $path,
+            $settings['baseUri'] . $this->urlencode($path),
             [
                 '{http://owncloud.org/ns}fileid'
             ],

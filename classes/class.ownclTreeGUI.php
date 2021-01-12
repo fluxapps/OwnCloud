@@ -27,7 +27,7 @@ class ownclTreeGUI extends ilTreeExplorerGUI
         $this->setAjax(true);
 
         // necessary from 5.4 to fix bug where only root node shows
-        $this->setNodeOpen('/');
+        $this->setNodeOpen($this->getNodeId($this->getRootNode()));
 
         $this->log = $ilLog;
         $css
@@ -127,7 +127,7 @@ class ownclTreeGUI extends ilTreeExplorerGUI
      * Please note that the class does not make any requirements how
      * nodes are represented (array or object)
      *
-     * @return mixed root node object/array
+     * @return ownclFolder root node object/array
      */
     function getRootNode()
     {

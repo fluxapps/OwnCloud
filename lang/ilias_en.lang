@@ -6,11 +6,8 @@ username#:#Username
 password#:#Password
 proxy#:#Proxy
 configuration#:#Configuration
-add_new_base_folder#:#Base-Folder
-add_new_custom_base_folder#:#New Folder
-add_new_custom_base_folder_input#:#Foldername
-add_new_custom_base_folder_input_info#:#With leading /
-add_new_default_base_folder#:#Main folder
+creation_frm_base_directory#:#Base-Folder
+creation_frm_base_directory_info#:#With leading /
 choose_root#:#Please choose a root folder from the tree below.<br>Note: folders with many files and subfolders may take a while to load. Alternatively, the path of the desired root folder can be typed in manually.
 link_choose_root#:#Choose folder
 no_connection#:#Could not connect to the OwnCloud server. Please check the configuration or contact the system administrator.
@@ -40,3 +37,4 @@ not_authorized#:#Authentication failed. Please reload the page to get redirected
 allow_open_in_owncloud#:#Activate "Edit in OwnCloud" for files
 allow_open_in_owncloud_info#:#This action will only be offered to users with the permission "Upload".
 open_in_owncloud#:#Edit in OwnCloud
+owncloud_specific_settings#:#OwnCloud specific settings

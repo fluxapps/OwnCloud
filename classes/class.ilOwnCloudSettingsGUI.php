@@ -240,7 +240,7 @@ class ilOwnCloudSettingsGUI extends ilCloudPluginSettingsGUI
             if (self::version()->is6()) {
                 $tpl->printToStdout();
             } else {
-            $tpl->show();
+                $tpl->show();
             }
             exit;
         } else {

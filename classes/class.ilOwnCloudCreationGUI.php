@@ -16,7 +16,8 @@ class ilOwnCloudCreationGUI extends ilCloudPluginCreationGUI
         $option->setTitle($config->getServiceTitle());
         $option->setInfo(nl2br($config->getServiceInfo()));
 
-        $base_directory = new ilTextInputGUI($this->txt('cfg_' . self::F_BASE_DIRECTORY), self::F_BASE_DIRECTORY);
+        $base_directory = new ilTextInputGUI($this->txt('creation_frm_' . self::F_BASE_DIRECTORY), self::F_BASE_DIRECTORY);
+        $base_directory->setInfo($this->txt('creation_frm_' . self::F_BASE_DIRECTORY . '_info'));
         $base_directory->setValue($this->getAdminConfigObject()->getValue(ownclConfig::F_BASE_DIRECTORY));
         $option->addSubItem($base_directory);
     }
