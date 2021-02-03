@@ -141,3 +141,27 @@ require_once("./Customizing/global/plugins/Modules/Cloud/CloudHook/OwnCloud/clas
 $conf = new ownclConfig();
 $conf->setValue(ownclConfig::F_BASE_DIRECTORY, '/ILIASshare');
 ?>
+<#11>
+<?php
+// rename rbac operation if already existent (from onedrive plugin)
+global $DIC;
+$query = $DIC->database()->query('SELECT * FROM rbac_operations WHERE operation = "cld_cldh_exod_asl_open_msoffice"');
+if ($res = $DIC->database()->fetchAssoc($query)) {
+    require_once("./Services/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php");
+    if (ilDBUpdateNewObjectType::getCustomRBACOperationId('edit_in_online_editor')) {
+        $DIC->database()->query('DELETE FROM rbac_operations WHERE ops_id = ' . $res['ops_id']);
+    } else {
+        $DIC->database()->query('UPDATE rbac_operations SET operation = "edit_in_online_editor", description = "edit in online editor" WHERE ops_id = ' . $res['ops_id']);
+    }
+} else {
+    //Adding a new Permission ("Open in Online Editor")
+    require_once("./Services/Migration/DBUpdate_3560/classes/class.ilDBUpdateNewObjectType.php");
+    $cld_type_id = ilDBUpdateNewObjectType::getObjectTypeId('cld');
+    if ($cld_type_id) {
+        $open_collaboration_app = ilDBUpdateNewObjectType::addCustomRBACOperation('edit_in_online_editor', 'edit in online editor', 'object', 280);
+        if ($open_collaboration_app) {
+            ilDBUpdateNewObjectType::addRBACOperation($cld_type_id, $open_collaboration_app);
+        }
+    }
+}
+?>

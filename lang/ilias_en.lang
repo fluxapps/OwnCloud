@@ -35,6 +35,6 @@ info_token_expires#:#Access-Token expires
 root_folder#:#Root Folder
 not_authorized#:#Authentication failed. Please reload the page to get redirected to the authentification point.
 allow_open_in_owncloud#:#Activate "Edit in OwnCloud" for files
-allow_open_in_owncloud_info#:#This action will only be offered to users with the permission "Upload".
+allow_open_in_owncloud_info#:#This action will only be offered to users with the permission "Edit in online editor".
 open_in_owncloud#:#Edit in OwnCloud
 owncloud_specific_settings#:#OwnCloud specific settings
