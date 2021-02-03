@@ -35,6 +35,6 @@ info_token_expires#:#Access-Token läuft aus
 root_folder#:#Ordner
 not_authorized#:#Authentifizierung fehlgeschlagen. Bitte Laden Sie die Seite erneut, um an die Authentifizierungsstelle weitergeleitet zu werden.
 allow_open_in_owncloud#:#"Bearbeiten in OwnCloud" für Dateien aktivieren
-allow_open_in_owncloud_info#:#Die Aktion wird nur für Benutzer mit dem Recht "Hochladen" angeboten.
+allow_open_in_owncloud_info#:#Die Aktion wird nur für Benutzer mit dem Recht "In Online-Editor Bearbeiten" angeboten.
 open_in_owncloud#:#Bearbeiten in OwnCloud
 owncloud_specific_settings#:#OwnCloud-spezifische Einstellungen

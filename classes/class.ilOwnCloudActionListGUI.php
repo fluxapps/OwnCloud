@@ -64,6 +64,11 @@ class ilOwnCloudActionListGUI extends ilCloudPluginActionListGUI
     protected function openInCollaborationApp()
     {
         global $DIC;
+        $upload_perm = $DIC->access()->checkAccess('edit_in_online_editor', '', filter_input(INPUT_GET, 'ref_id', FILTER_SANITIZE_NUMBER_INT));
+        if (!$upload_perm || !$this->isOpenInOwnCloudActive()) {
+            echo 'Permission Denied.';
+            exit;
+        }
         $path = filter_input(INPUT_GET, self::ITEM_PATH, FILTER_SANITIZE_STRING);
         $id = filter_input(INPUT_GET, self::ITEM_ID, FILTER_SANITIZE_STRING);
 
@@ -84,7 +89,7 @@ class ilOwnCloudActionListGUI extends ilCloudPluginActionListGUI
     protected function checkHasAction()
     {
         global $DIC;
-        $upload_perm = $DIC->access()->checkAccess('upload', '', filter_input(INPUT_GET, 'ref_id', FILTER_SANITIZE_NUMBER_INT));
+        $upload_perm = $DIC->access()->checkAccess('edit_in_online_editor', '', filter_input(INPUT_GET, 'ref_id', FILTER_SANITIZE_NUMBER_INT));
         $format = strtolower(pathinfo($this->node->getPath(), PATHINFO_EXTENSION));
         return $upload_perm
             && !$this->node->getIsDir()

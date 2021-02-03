@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.7.2]
+- change: "Edit in OwnCloud" now checks "Edit in online editor" Permission - **plugin permissions might need to be adjusted**
+
 ## [2.7.1]
 - improvement: added info text to 'base directory' input
 - Fix: fixed tree picker ('Choose folder')
