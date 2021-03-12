@@ -17,6 +17,9 @@ class ownclConfig extends ilCloudPluginConfig
     const F_OAUTH2_CLIENT_ID = 'oauth2_client_id';
     const F_OAUTH2_CLIENT_SECRET = 'oauth2_client_secret';
     const F_OAUTH2_PATH = 'oauth2_path';
+    const F_OAUTH2_TOKEN_REQUEST_AUTH = 'oauth2_token_request_auth';
+    const POST_BODY = 'post_body';
+    const HEADER = 'header';
     const F_COLLABORATION_APP_INTEGRATION = 'collaboration_app_integration';
     const F_COLLABORATION_APP_URL = 'url';
     const F_COLLABORATION_APP_FORMATS = 'formats';
@@ -136,6 +139,17 @@ class ownclConfig extends ilCloudPluginConfig
         $value = $this->getValue(self::F_OAUTH2_ACTIVE . '_' . self::F_OAUTH2_PATH);
 
         return (!$value && $return_default) ? self::DEFAULT_OAUTH2_PATH : $value;
+    }
+
+    /**
+     * default: 'header'
+     *
+     * @return string
+     * @throws ilCloudPluginConfigException
+     */
+    public function getOAuth2TokenRequestAuth(): string
+    {
+        return $this->getValue(self::F_OAUTH2_ACTIVE . '_' . self::F_OAUTH2_TOKEN_REQUEST_AUTH) ?? self::HEADER;
     }
 
 

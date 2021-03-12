@@ -22,6 +22,10 @@ cfg_oauth2_active#:#OAuth2-Authentifizierung
 cfg_oauth2_active_oauth2_client_id#:#Client Identifier
 cfg_oauth2_active_oauth2_client_secret#:#Secret
 cfg_oauth2_active_oauth2_path#:#OAuth2-Pfad
+cfg_oauth2_active_oauth2_token_request_auth#:#Token-Request Authentifizierung
+cfg_oauth2_active_oauth2_token_request_auth_info#:#Definiert, auf welche Art Token-Requests authentifiziert werden (experimentell - für NextCloud wird möglicherweise "Post Body" benötigt).
+header#:#Basic (Header)
+post_body#:#Post Body
 cfg_default_info#:#Default: %s
 cfg_collaboration_app_integration#:#Collaboration-App-Integration
 cfg_collaboration_app_integration_info#:#Aktiviert die Aktion "Bearbeiten in OwnCloud", welche Dokumente direkt in einer Collaboration App (z.B. OnlyOffice) öffnet.
