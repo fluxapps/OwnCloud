@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.8.0]
+- Support ILIAS 7
+- feature: configurable token request type (POST_BODY or HEADER)
+
 ## [2.7.2]
 - change: "Edit in OwnCloud" now checks "Edit in online editor" Permission - **plugin permissions might need to be adjusted**
 

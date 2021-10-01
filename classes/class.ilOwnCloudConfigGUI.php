@@ -66,6 +66,15 @@ class ilOwnCloudConfigGUI extends ilCloudPluginConfigGUI
                         "info" => sprintf($this->plugin_object->txt("cfg_default_info"),
                             ownclConfig::DEFAULT_OAUTH2_PATH)
                     ),
+                    ownclConfig::F_OAUTH2_TOKEN_REQUEST_AUTH => [
+                        'type' => self::IL_SELECT_INPUT_GUI,
+                        'required' => true,
+                        'subelements' => null,
+                        'options' => [
+                            ownclConfig::HEADER => $this->plugin_object->txt(ownclConfig::HEADER),
+                            ownclConfig::POST_BODY => $this->plugin_object->txt(ownclConfig::POST_BODY),
+                        ]
+                    ]
                 )
             ),
             ownclConfig::F_COLLABORATION_APP_INTEGRATION => array(

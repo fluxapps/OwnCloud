@@ -18,10 +18,14 @@ cfg_base_directory#:#Base directory
 cfg_base_directory_info#:#This directory will be set as 'root folder' in newly created objects. This setting can be used to avoid including the entire OwnCloud in new objects. The root folder can still be changed later.
 cfg_server_url#:#Server-URL
 cfg_webdav_path#:#WebDAV-Path
-cfg_oauth2_active#:#OAuth2 authentification
+cfg_oauth2_active#:#OAuth2 authentication
 cfg_oauth2_active_oauth2_client_id#:#Client Identifier
 cfg_oauth2_active_oauth2_client_secret#:#Secret
 cfg_oauth2_active_oauth2_path#:#OAuth2-Path
+cfg_oauth2_active_oauth2_token_request_auth#:#Token Request Authentication
+cfg_oauth2_active_oauth2_token_request_auth_info#:#Defines the way token requests are authenticated (experimental - NextCloud may need to switch to 'Post Body').
+header#:#Basic (Header)
+post_body#:#Post Body
 cfg_default_info#:#Default: %s
 cfg_collaboration_app_integration#:#Collaboration App Integration
 cfg_collaboration_app_integration_info#:#Activates action "Edit in OwnCloud", which opens documents in a Collaboration App (e.g. OnlyOffice).

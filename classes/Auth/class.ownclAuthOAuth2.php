@@ -2,6 +2,9 @@
 /* Copyright (c) 1998-2009 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 use ILIAS\DI\Container;
+use League\OAuth2\Client\OptionProvider\HttpBasicAuthOptionProvider;
+use League\OAuth2\Client\Provider\GenericProvider;
+use League\OAuth2\Client\OptionProvider\PostAuthOptionProvider;
 
 /**
  * Class ownclAuthOAuth2
@@ -18,7 +21,7 @@ class ownclAuthOAuth2 implements ownclAuth
      */
     protected $app;
     /**
-     * @var OAuth2Provider
+     * @var GenericProvider
      */
     protected $oauth2_provider;
     /**
@@ -46,16 +49,28 @@ class ownclAuthOAuth2 implements ownclAuth
         $this->dic = $DIC;
         $this->setApp($app);
         $this->config = new ownclConfig();
-        $this->oauth2_provider = new OAuth2Provider(array(
-            'clientId'                => $this->config->getOAuth2ClientID(),
-            'clientSecret'            => $this->config->getOAuth2ClientSecret(),
-            'redirect_uri'            => $this->getRedirectUri(),
-            'urlAuthorize'            => $this->config->getFullOAuth2Path() . '/authorize',
-            'urlAccessToken'          => $this->config->getFullOAuth2Path() . '/api/v1/token',
+        $this->oauth2_provider = new GenericProvider([
+            'clientId' => $this->config->getOAuth2ClientID(),
+            'clientSecret' => $this->config->getOAuth2ClientSecret(),
+            'redirect_uri' => $this->getRedirectUri(),
+            'urlAuthorize' => $this->config->getFullOAuth2Path() . '/authorize',
+            'urlAccessToken' => $this->config->getFullOAuth2Path() . '/api/v1/token',
             'urlResourceOwnerDetails' => $this->config->getFullOAuth2Path() . '/resource',
-        ));
+        ], [
+            'optionProvider' => $this->getOptionProvider()
+        ]);
     }
 
+    private function getOptionProvider()
+    {
+        switch ($this->config->getOAuth2TokenRequestAuth()) {
+            case ownclConfig::POST_BODY:
+                return new PostAuthOptionProvider();
+            case ownclConfig::HEADER:
+            default:
+                return new HttpBasicAuthOptionProvider();
+        }
+    }
 
     public function getHeaders()
     {
