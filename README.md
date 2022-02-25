@@ -9,15 +9,15 @@ Have a look at the [full Documentation](/doc/Documentation.pdf?raw=true)
 
 ***
 
-### Adjustment suggestions
-* Adjustment suggestions by pull requests
-* Adjustment suggestions which are not yet worked out in detail by Jira tasks under https://jira.studer-raimann.ch/projects/PLOWNCLOUD
-* Bug reports under https://jira.studer-raimann.ch/projects/PLOWNCLOUD
-* For external users you can report it at https://plugins.studer-raimann.ch/goto.php?target=uihk_srsu_PLOWNCLOUD
+# Contributing :purple_heart:
+Please ...
+1. ... register an account at https://git.fluxlabs.ch
+2. ... write us an email: support@fluxlabs.ch
+3. ... we give you access to the projects you like to contribute :fire:
 
-### ILIAS Plugin SLA
-Wir lieben und leben die Philosophie von Open Source Software! Die meisten unserer Entwicklungen, welche wir im Kundenauftrag oder in Eigenleistung entwickeln, stellen wir öffentlich allen Interessierten kostenlos unter https://github.com/studer-raimann zur Verfügung.
 
-Setzen Sie eines unserer Plugins professionell ein? Sichern Sie sich mittels SLA die termingerechte Verfügbarkeit dieses Plugins auch für die kommenden ILIAS Versionen. Informieren Sie sich hierzu unter https://studer-raimann.ch/produkte/ilias-plugins/plugin-sla.
-
-Bitte beachten Sie, dass wir nur Institutionen, welche ein SLA abschliessen Unterstützung und Release-Pflege garantieren.
+# Adjustment suggestions / bug reporting :feet:
+Please ...
+1. ... register an account at https://git.fluxlabs.ch
+2. ... ask us for a sla: support@fluxlabs.ch :kissing_heart:
+3. ... we will give you the access with the possibility to read and create issues or to discuss feature requests with us.
