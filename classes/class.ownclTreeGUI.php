@@ -89,7 +89,7 @@ class ownclTreeGUI extends ilTreeExplorerGUI
 
         $node->getName() ? $name = $node->getName() : $name = $config->getServiceTitle();
 
-        return $name;
+        return htmlspecialchars($name);
     }
 
 

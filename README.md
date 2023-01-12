@@ -7,6 +7,22 @@ Allows the connection of an OwnCloud platform to ILIAS LMS through ILIAS' Cloud 
 
 Have a look at the [full Documentation](/doc/Documentation.pdf?raw=true)
 
+## Getting Started
+
+### Requirements
+
+* ILIAS 6.x / 7.x
+
+### Installation
+
+Start at your ILIAS root directory
+```bash
+mkdir -p Customizing/global/plugins/Modules/Cloud/CloudHook/
+cd Customizing/global/plugins/Modules/Cloud/CloudHook/
+git clone https://github.com/fluxapps/OwnCloud.git
+```
+As ILIAS administrator go to "Administration->Plugins" and install/activate the plugin.
+
 ## Rebuild & Maintenance
 
 fluxlabs ag, support@fluxlabs.ch

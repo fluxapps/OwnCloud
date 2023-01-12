@@ -1,4 +1,6 @@
 # Changelog
+## [2023.01.12]
+- fix getContentNode
 
 ## [2.8.0]
 - Support ILIAS 7

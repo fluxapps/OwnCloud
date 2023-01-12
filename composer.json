@@ -1,26 +1,6 @@
 {
-  "name": "srag/plugins/owncloud",
-  "description": "",
+  "name": "fluxapps/owncloud",
   "type": "project",
-  "keywords": [
-    "ILIAS",
-    "Plugin",
-    "OwnCloud",
-    "Sciebo"
-  ],
-  "homepage": "https://github.com/studer-raimann/OwnCloud",
-  "license": "GPL-3.0-only",
-  "authors": [
-    {
-      "name": "studer + raimann ag - Team Custom 1",
-      "email": "support-custom1@studer-raimann.ch",
-      "homepage": "https://studer-raimann.ch",
-      "role": "Developer"
-    }
-  ],
-  "support": {
-    "issues": "https://plugins.studer-raimann.ch/goto.php?target=uihk_srsu_PLOWNCLOUD"
-  },
   "require": {
     "league/oauth2-client": "^2.4",
     "php": ">=7.0",
